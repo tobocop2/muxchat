@@ -1,0 +1,17 @@
+id: {{.Name}}
+url: http://mautrix-{{.Name}}:{{.Port}}
+as_token: {{.ASToken}}
+hs_token: {{.HSToken}}
+sender_localpart: {{.BotUsername}}
+rate_limited: false
+
+namespaces:
+  users:
+    - regex: '@{{.NamespacePrefix}}.*:{{.ServerName}}'
+      exclusive: true
+    - regex: '@{{.BotUsername}}:{{.ServerName}}'
+      exclusive: true
+  aliases:
+    - regex: '#{{.NamespacePrefix}}.*:{{.ServerName}}'
+      exclusive: true
+  rooms: []

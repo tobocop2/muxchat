@@ -1,0 +1,70 @@
+server_name: "{{.ServerName}}"
+pid_file: /data/homeserver.pid
+public_baseurl: "{{.PublicBaseURL}}"
+
+listeners:
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: {{.HTTPS}}
+    bind_addresses: ['0.0.0.0']
+    resources:
+      - names: [client, federation]
+        compress: false
+
+database:
+  name: psycopg2
+  args:
+    user: {{.Postgres.User}}
+    password: {{.Postgres.Password}}
+    database: {{.Postgres.Database}}
+    host: postgres
+    cp_min: 5
+    cp_max: 10
+
+log_config: "/data/log.config"
+media_store_path: /data/media_store
+signing_key_path: /data/{{.ServerName}}.signing.key
+report_stats: false
+
+registration_shared_secret: "{{.RegistrationSecret}}"
+enable_registration: false
+enable_registration_without_verification: false
+
+federation_domain_whitelist: []
+
+# Appservice registrations - includes doublepuppet for double puppeting support
+app_service_config_files:
+  - /data/doublepuppet-registration.yaml
+{{- range .Bridges}}
+  - /bridges/{{.}}/registration.yaml
+{{- end}}
+
+suppress_key_server_warning: true
+
+# Auto-accept invites for local users (especially from bridges)
+auto_accept_invites:
+  enabled: true
+  only_for_direct_messages: false
+  only_from_local_users: false
+
+# Disable rate limiting for bridges and local users
+rc_joins:
+  local:
+    per_second: 100
+    burst_count: 100
+  remote:
+    per_second: 10
+    burst_count: 10
+
+rc_joins_per_room:
+  per_second: 100
+  burst_count: 100
+
+rc_invites:
+  per_room:
+    per_second: 100
+    burst_count: 100
+  per_user:
+    per_second: 100
+    burst_count: 100

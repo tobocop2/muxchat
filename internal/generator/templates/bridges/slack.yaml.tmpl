@@ -1,0 +1,71 @@
+# Network-specific config options
+network:
+    displayname_template: '{{`{{or .RealName .Name "Unknown"}}`}} (Slack)'
+
+# Bridge settings
+bridge:
+    command_prefix: '!slack'
+    personal_filtering_spaces: true
+    private_chat_portal_meta: always
+    management_room_text:
+        welcome: |
+            Hello! I'm a Slack bridge bot.
+
+            **To log in:**
+            Run helper: `cd helpers && npm install && node slack.js`
+            Or manually extract token (xoxc-) and cookie (xoxd-) from browser.
+            Then send: `login token <token> <cookie>`
+
+            Docs: https://docs.mau.fi/bridges/go/slack/authentication.html
+            Alternative: https://github.com/mautrix/manager
+        welcome_connected: "You're connected to Slack."
+        welcome_unconnected: "Use `login token` to connect your Slack account."
+    permissions:
+        "*": relay
+        "{{.ServerName}}": user
+        "@{{.AdminUser}}:{{.ServerName}}": admin
+
+# Database config - TOP LEVEL
+database:
+    type: sqlite3-fk-wal
+    uri: file:/data/mautrix-slack.db?_txlock=immediate
+
+# Homeserver details
+homeserver:
+    address: http://synapse:8008
+    domain: {{.ServerName}}
+    software: standard
+    async_media: false
+
+# Appservice details
+appservice:
+    address: http://mautrix-slack:{{.Port}}
+    hostname: 0.0.0.0
+    port: {{.Port}}
+    id: slack
+    bot:
+        username: {{.BotUsername}}
+        displayname: Slack bridge bot
+    ephemeral_events: true
+    async_transactions: false
+    as_token: {{.ASToken}}
+    hs_token: {{.HSToken}}
+    username_template: slack_{{`{{.}}`}}
+
+# Matrix settings
+matrix:
+    message_status_events: false
+    delivery_receipts: true
+    message_error_notices: true
+
+# Double puppeting - makes your messages appear as you, not ghost users
+double_puppet:
+    secrets:
+        {{.ServerName}}: "{{.DoublePuppetSecret}}"
+
+# Logging config
+logging:
+    min_level: info
+    writers:
+        - type: stdout
+          format: pretty-colored

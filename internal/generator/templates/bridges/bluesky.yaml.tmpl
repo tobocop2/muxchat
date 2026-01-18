@@ -1,0 +1,69 @@
+# Network-specific config options
+network:
+    displayname_template: '{{`{{or .DisplayName .Handle "Unknown"}}`}} (Bluesky)'
+
+# Bridge settings
+bridge:
+    command_prefix: '!bsky'
+    personal_filtering_spaces: true
+    private_chat_portal_meta: always
+    management_room_text:
+        welcome: |
+            Hello! I'm a Bluesky bridge bot.
+
+            **To log in:**
+            Send `login` and enter your handle/email and password.
+            (Use an app-specific password if you have 2FA enabled)
+
+            Docs: https://docs.mau.fi/bridges/go/bluesky/authentication.html
+        welcome_connected: "You're connected to Bluesky."
+        welcome_unconnected: "Use `login` to connect your Bluesky account."
+    permissions:
+        "*": relay
+        "{{.ServerName}}": user
+        "@{{.AdminUser}}:{{.ServerName}}": admin
+
+# Database config - TOP LEVEL
+database:
+    type: sqlite3-fk-wal
+    uri: file:/data/mautrix-bluesky.db?_txlock=immediate
+
+# Homeserver details
+homeserver:
+    address: http://synapse:8008
+    domain: {{.ServerName}}
+    software: standard
+    async_media: false
+
+# Appservice details
+appservice:
+    address: http://mautrix-bluesky:{{.Port}}
+    hostname: 0.0.0.0
+    port: {{.Port}}
+    id: bluesky
+    bot:
+        username: {{.BotUsername}}
+        displayname: Bluesky bridge bot
+    ephemeral_events: true
+    async_transactions: false
+    as_token: {{.ASToken}}
+    hs_token: {{.HSToken}}
+    username_template: bluesky_{{`{{.}}`}}
+
+# Matrix settings
+matrix:
+    message_status_events: false
+    delivery_receipts: true
+    message_error_notices: true
+
+# Double puppeting - makes your messages appear as you, not ghost users
+double_puppet:
+    secrets:
+        {{.ServerName}}: "{{.DoublePuppetSecret}}"
+
+# Logging config
+logging:
+    min_level: info
+    writers:
+        - type: stdout
+          format: pretty-colored

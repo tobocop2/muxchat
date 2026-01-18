@@ -1,0 +1,10 @@
+id: doublepuppet
+url:
+as_token: {{.ASToken}}
+hs_token: {{.HSToken}}
+sender_localpart: _doublepuppet
+rate_limited: false
+namespaces:
+  users:
+    - regex: '@.*:{{.ServerName}}'
+      exclusive: false

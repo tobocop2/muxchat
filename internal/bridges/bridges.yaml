@@ -1,0 +1,153 @@
+# Bridges that use QR code or simple login (no app registration required)
+
+whatsapp:
+  description: WhatsApp via linked device
+  port: 29318
+  login_instructions: |
+    1. Chat with @whatsappbot:SERVER
+    2. Send: login qr (or login phone for pairing code)
+    3. Scan QR with WhatsApp (Settings → Linked Devices)
+
+    Docs: https://docs.mau.fi/bridges/go/whatsapp/authentication.html
+
+signal:
+  description: Signal messenger
+  port: 29313
+  login_instructions: |
+    1. Chat with @signalbot:SERVER
+    2. Send: login
+    3. Scan QR with Signal (Settings → Linked Devices)
+
+    Docs: https://docs.mau.fi/bridges/go/signal/authentication.html
+
+discord:
+  description: Discord
+  port: 29316
+  login_instructions: |
+    1. Chat with @discordbot:SERVER
+    2. Send: login-qr
+    3. Scan QR with Discord mobile app
+
+    To bridge a server: guilds, then guilds bridge <id>
+
+    Docs: https://docs.mau.fi/bridges/go/discord/authentication.html
+
+gmessages:
+  description: Google Messages (SMS/RCS)
+  port: 29314
+  login_instructions: |
+    1. Chat with @gmessagesbot:SERVER
+    2. Send: login
+    3. Scan QR with Google Messages (⋮ → Device pairing)
+
+bluesky:
+  description: Bluesky social network
+  port: 29325
+  login_instructions: |
+    1. Chat with @blueskybot:SERVER
+    2. Send: login
+    3. Enter your handle/email and password
+       (Use app-specific password if 2FA enabled)
+
+    Docs: https://docs.mau.fi/bridges/go/bluesky/authentication.html
+
+irc:
+  description: IRC networks
+  port: 29326
+  login_instructions: |
+    1. Chat with @ircbot:SERVER
+    2. Send: login
+    3. Enter network name, nickname, and SASL credentials
+
+    Docs: https://docs.mau.fi/bridges/go/irc/authentication.html
+
+# Bridges that require cookie/token extraction (use helpers or mautrix-manager)
+
+googlechat:
+  description: Google Chat (Workspace)
+  port: 29320
+  note: Requires cookie extraction
+  login_instructions: |
+    1. Chat with @googlechatbot:SERVER
+    2. Run helper: cd helpers && npm install && node googlechat.js
+    3. Paste the JSON cookies to the bot
+
+    Alternative: https://github.com/mautrix/manager
+
+gvoice:
+  description: Google Voice (SMS/calls)
+  port: 29321
+  note: Requires cookie extraction
+  login_instructions: |
+    1. Chat with @gvoicebot:SERVER
+    2. Run helper: cd helpers && npm install && node gvoice.js
+    3. Paste the JSON cookies to the bot
+
+    Docs: https://docs.mau.fi/bridges/go/gvoice/authentication.html
+    Alternative: https://github.com/mautrix/manager
+
+slack:
+  description: Slack
+  port: 29315
+  note: Requires token extraction
+  login_instructions: |
+    1. Chat with @slackbot:SERVER
+    2. Run helper: cd helpers && npm install && node slack.js
+    3. Paste the login command to the bot
+
+    Docs: https://docs.mau.fi/bridges/go/slack/authentication.html
+    Alternative: https://github.com/mautrix/manager
+
+meta:
+  description: Facebook/Instagram (Meta)
+  port: 29323
+  note: Requires cookie extraction
+  login_instructions: |
+    1. Chat with @metabot:SERVER
+    2. Send: login
+    3. Extract cookies from browser, paste as cURL
+
+    Docs: https://docs.mau.fi/bridges/go/meta/authentication.html
+    Alternative: https://github.com/mautrix/manager
+
+twitter:
+  description: Twitter/X
+  port: 29324
+  note: Requires cookie extraction
+  login_instructions: |
+    1. Chat with @twitterbot:SERVER
+    2. Extract ct0 and auth_token cookies from browser
+    3. Send: login <ct0> <auth_token>
+
+    Docs: https://docs.mau.fi/bridges/go/twitter/authentication.html
+    Alternative: https://github.com/mautrix/manager
+
+linkedin:
+  description: LinkedIn Messaging
+  port: 29322
+  note: Requires cookie extraction
+  login_instructions: |
+    1. Chat with @linkedinbot:SERVER
+    2. Send: login
+    3. Extract cookies from browser, paste as cURL
+
+    Docs: https://docs.mau.fi/bridges/go/linkedin/authentication.html
+    Alternative: https://github.com/mautrix/manager
+
+# Bridges that require API credentials (user must register their own app)
+
+telegram:
+  description: Telegram
+  port: 29317
+  note: Requires API credentials from my.telegram.org
+  requires_api_credentials: true
+  login_instructions: |
+    1. Chat with @telegrambot:SERVER
+    2. Send: login
+    3. Enter your phone number
+    4. Enter the verification code from Telegram
+
+    Docs: https://docs.mau.fi/bridges/python/telegram/authentication.html
+
+# NOT SUPPORTED:
+# - iMessage: Requires macOS or jailbroken iOS, cannot run on Linux

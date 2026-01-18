@@ -1,0 +1,5 @@
+{{.Domain}} {
+    reverse_proxy /_matrix/* synapse:8008
+    reverse_proxy /* element:80
+    tls {{.Email}}
+}

@@ -1,0 +1,30 @@
+# Binary
+muxchat
+
+# Go build artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test artifacts
+*.test
+*.out
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backups
+*.tar.gz
+muxchat-backup-*
+
+# Claude Code
+.claude/

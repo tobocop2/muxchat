@@ -1,0 +1,16 @@
+{
+  "name": "muxchat-helpers",
+  "version": "1.0.0",
+  "description": "Cookie extraction helpers for mautrix bridges that require manual authentication",
+  "scripts": {
+    "googlechat": "node googlechat.js",
+    "gvoice": "node gvoice.js",
+    "slack": "node slack.js"
+  },
+  "dependencies": {
+    "puppeteer-core": "^21.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,59 @@
+homeserver:
+  address: http://synapse:8008
+  domain: {{.ServerName}}
+
+appservice:
+  address: http://mautrix-googlechat:{{.Port}}
+  hostname: 0.0.0.0
+  port: {{.Port}}
+  database: sqlite:////data/mautrix-googlechat.db
+  id: googlechat
+  bot_username: {{.BotUsername}}
+  as_token: {{.ASToken}}
+  hs_token: {{.HSToken}}
+
+bridge:
+  username_template: "googlechat_{userid}"
+  displayname_template: "{full_name}"
+  delivery_receipts: true
+  # Sync ALL chats on startup/login (default is 10)
+  initial_chat_sync: -1
+  # Double puppeting - makes your messages appear as you
+  login_shared_secret_map:
+    {{.ServerName}}: "{{.DoublePuppetSecret}}"
+  management_room_text:
+    welcome: >
+      Hello! I'm a Google Chat bridge bot.
+
+      To log in, run helper: cd helpers && npm install && node googlechat.js
+
+      Or manually extract cookies and send as JSON.
+
+      Docs: https://docs.mau.fi/bridges/python/googlechat/authentication.html
+
+      Alternative: https://github.com/mautrix/manager
+    welcome_connected: You're connected to Google Chat.
+    welcome_unconnected: Use `login` to connect your Google account.
+  permissions:
+    "*": relaybot
+    "{{.ServerName}}": user
+    "@{{.AdminUser}}:{{.ServerName}}": admin
+
+logging:
+  version: 1
+  formatters:
+    colored:
+      (): mautrix_googlechat.util.ColorFormatter
+      format: "[%(asctime)s] [%(levelname)s@%(name)s] %(message)s"
+  handlers:
+    console:
+      class: logging.StreamHandler
+      formatter: colored
+  loggers:
+    mau:
+      level: INFO
+    aiohttp:
+      level: INFO
+  root:
+    level: INFO
+    handlers: [console]

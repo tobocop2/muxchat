@@ -1,0 +1,80 @@
+# Homeserver details
+homeserver:
+    address: http://synapse:8008
+    domain: {{.ServerName}}
+    software: standard
+    async_media: false
+
+# Appservice config
+appservice:
+    address: http://mautrix-discord:{{.Port}}
+    hostname: 0.0.0.0
+    port: {{.Port}}
+    id: discord
+    bot:
+        username: {{.BotUsername}}
+        displayname: Discord bridge bot
+    ephemeral_events: true
+    as_token: {{.ASToken}}
+    hs_token: {{.HSToken}}
+    # Database config (legacy format - inside appservice)
+    database:
+        type: sqlite3-fk-wal
+        uri: file:///data/mautrix-discord.db?_txlock=immediate
+
+# Bridge settings
+bridge:
+    username_template: discord_{{`{{.}}`}}
+    displayname_template: '{{`{{or .GlobalName .Username "Unknown"}}`}} (Discord)'
+    channel_name_template: '{{`{{if or (eq .Type 3) (eq .Type 4)}}{{.Name}}{{else}}#{{.Name}}{{end}}`}}'
+    guild_name_template: '{{`{{.Name}}`}}'
+    command_prefix: '!discord'
+    delivery_receipts: true
+    message_status_events: false
+    message_error_notices: true
+    restricted_rooms: false
+    autojoin_thread_on_open: true
+    embed_fields_as_tables: true
+    mute_channels_on_create: false
+    sync_direct_chat_list: true
+    resend_bridge_info: false
+    delete_portal_on_channel_delete: false
+    delete_guild_on_leave: true
+    portal_message_buffer: 128
+    startup_private_channel_create_limit: 5
+    private_channel_create_limit: 0
+    animated_sticker:
+        target: webp
+        args:
+            width: 320
+            height: 320
+            fps: 25
+    management_room_text:
+        welcome: |
+            Hello! I'm a Discord bridge bot.
+
+            **To log in:**
+            Send `login-qr` and scan the QR code with Discord mobile app.
+
+            **To bridge a server:**
+            After logging in: `guilds` to list, then `guilds bridge <id>`
+
+            Docs: https://docs.mau.fi/bridges/go/discord/authentication.html
+        welcome_connected: "You're connected to Discord."
+        welcome_unconnected: "Use `login-qr` to connect your Discord account."
+    permissions:
+        "*": relay
+        "{{.ServerName}}": user
+        "@{{.AdminUser}}:{{.ServerName}}": admin
+
+# Double puppeting - makes your messages appear as you, not ghost users
+double_puppet:
+    secrets:
+        {{.ServerName}}: "{{.DoublePuppetSecret}}"
+
+# Logging config
+logging:
+    min_level: info
+    writers:
+        - type: stdout
+          format: pretty-colored

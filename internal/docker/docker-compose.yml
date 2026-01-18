@@ -1,0 +1,234 @@
+name: muxchat
+
+services:
+  postgres:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: synapse
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: synapse
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --lc-collate=C --lc-ctype=C"
+    volumes:
+      - ${DATA_DIR}/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U synapse"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - muxchat
+
+  synapse:
+    image: matrixdotorg/synapse:latest
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SYNAPSE_CONFIG_PATH: /data/homeserver.yaml
+    volumes:
+      - ${CONFIG_DIR}/synapse/homeserver.yaml:/data/homeserver.yaml:ro
+      - ${CONFIG_DIR}/synapse/log.config:/data/log.config:ro
+      - ${CONFIG_DIR}/bridges:/bridges:ro
+      - ${DATA_DIR}/synapse:/data
+    ports:
+      - "${SYNAPSE_PORT:-8008}:8008"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8008/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - muxchat
+
+  element:
+    image: vectorim/element-web:latest
+    profiles: ["element"]
+    restart: unless-stopped
+    depends_on:
+      synapse:
+        condition: service_healthy
+    volumes:
+      - ${CONFIG_DIR}/element/config.json:/app/config.json:ro
+    ports:
+      - "${ELEMENT_PORT:-8080}:80"
+    networks:
+      - muxchat
+
+  caddy:
+    image: caddy:latest
+    profiles: ["https"]
+    restart: unless-stopped
+    depends_on:
+      synapse:
+        condition: service_healthy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ${CONFIG_DIR}/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ${DATA_DIR}/caddy/data:/data
+      - ${DATA_DIR}/caddy/config:/config
+    networks:
+      - muxchat
+
+  mautrix-whatsapp:
+    image: dock.mau.dev/mautrix/whatsapp:latest
+    profiles: ["whatsapp"]
+    restart: unless-stopped
+    depends_on:
+      synapse:
+        condition: service_healthy
+    volumes:
+      - ${DATA_DIR}/bridges/whatsapp:/data
+    networks:
+      - muxchat
+
+  mautrix-gmessages:
+    image: dock.mau.dev/mautrix/gmessages:latest
+    profiles: ["gmessages"]
+    restart: unless-stopped
+    depends_on:
+      synapse:
+        condition: service_healthy
+    volumes:
+      - ${DATA_DIR}/bridges/gmessages:/data
+    networks:
+      - muxchat
+
+  mautrix-signal:
+    image: dock.mau.dev/mautrix/signal:latest
+    profiles: ["signal"]
+    restart: unless-stopped
+    depends_on:
+      synapse:
+        condition: service_healthy
+    volumes:
+      - ${DATA_DIR}/bridges/signal:/data
+    networks:
+      - muxchat
+
+  mautrix-discord:
+    image: dock.mau.dev/mautrix/discord:latest
+    profiles: ["discord"]
+    restart: unless-stopped
+    depends_on:
+      synapse:
+        condition: service_healthy
+    volumes:
+      - ${DATA_DIR}/bridges/discord:/data
+    networks:
+      - muxchat
+
+  mautrix-slack:
+    image: dock.mau.dev/mautrix/slack:latest
+    profiles: ["slack"]
+    restart: unless-stopped
+    depends_on:
+      synapse:
+        condition: service_healthy
+    volumes:
+      - ${DATA_DIR}/bridges/slack:/data
+    networks:
+      - muxchat
+
+  mautrix-googlechat:
+    image: dock.mau.dev/mautrix/googlechat:latest
+    profiles: ["googlechat"]
+    restart: unless-stopped
+    depends_on:
+      synapse:
+        condition: service_healthy
+    volumes:
+      - ${DATA_DIR}/bridges/googlechat:/data
+    networks:
+      - muxchat
+
+  mautrix-gvoice:
+    image: dock.mau.dev/mautrix/gvoice:latest
+    profiles: ["gvoice"]
+    restart: unless-stopped
+    depends_on:
+      synapse:
+        condition: service_healthy
+    volumes:
+      - ${DATA_DIR}/bridges/gvoice:/data
+    networks:
+      - muxchat
+
+  mautrix-linkedin:
+    image: dock.mau.dev/mautrix/linkedin:latest
+    profiles: ["linkedin"]
+    restart: unless-stopped
+    depends_on:
+      synapse:
+        condition: service_healthy
+    volumes:
+      - ${DATA_DIR}/bridges/linkedin:/data
+    networks:
+      - muxchat
+
+  mautrix-meta:
+    image: dock.mau.dev/mautrix/meta:latest
+    profiles: ["meta"]
+    restart: unless-stopped
+    depends_on:
+      synapse:
+        condition: service_healthy
+    volumes:
+      - ${DATA_DIR}/bridges/meta:/data
+    networks:
+      - muxchat
+
+  mautrix-twitter:
+    image: dock.mau.dev/mautrix/twitter:latest
+    profiles: ["twitter"]
+    restart: unless-stopped
+    depends_on:
+      synapse:
+        condition: service_healthy
+    volumes:
+      - ${DATA_DIR}/bridges/twitter:/data
+    networks:
+      - muxchat
+
+  mautrix-bluesky:
+    image: dock.mau.dev/mautrix/bluesky:latest
+    profiles: ["bluesky"]
+    restart: unless-stopped
+    depends_on:
+      synapse:
+        condition: service_healthy
+    volumes:
+      - ${DATA_DIR}/bridges/bluesky:/data
+    networks:
+      - muxchat
+
+  mautrix-irc:
+    image: dock.mau.dev/mautrix/irc:latest
+    profiles: ["irc"]
+    restart: unless-stopped
+    depends_on:
+      synapse:
+        condition: service_healthy
+    volumes:
+      - ${DATA_DIR}/bridges/irc:/data
+    networks:
+      - muxchat
+
+  mautrix-telegram:
+    image: dock.mau.dev/mautrix/telegram:latest
+    profiles: ["telegram"]
+    restart: unless-stopped
+    depends_on:
+      synapse:
+        condition: service_healthy
+    volumes:
+      - ${DATA_DIR}/bridges/telegram:/data
+    networks:
+      - muxchat
+
+networks:
+  muxchat:
+    driver: bridge

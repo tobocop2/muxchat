@@ -1,0 +1,82 @@
+# Telegram API credentials (from https://my.telegram.org)
+telegram:
+  api_id: {{.TelegramAPIID}}
+  api_hash: {{.TelegramAPIHash}}
+
+homeserver:
+  address: http://synapse:8008
+  domain: {{.ServerName}}
+
+appservice:
+  address: http://mautrix-telegram:{{.Port}}
+  hostname: 0.0.0.0
+  port: {{.Port}}
+  database: sqlite:////data/mautrix-telegram.db
+  id: telegram
+  bot_username: {{.BotUsername}}
+  as_token: {{.ASToken}}
+  hs_token: {{.HSToken}}
+
+bridge:
+  username_template: "telegram_{userid}"
+  displayname_template: "{displayname} (TG)"
+  delivery_receipts: true
+  # Double puppeting - makes your messages appear as you
+  login_shared_secret_map:
+    {{.ServerName}}: "{{.DoublePuppetSecret}}"
+  # Sync ALL chats on login/startup (-1 = unlimited)
+  startup_sync: true
+  sync_create_limit: -1
+  sync_direct_chats: true
+  sync_direct_chat_list: true
+  # Auto-create portals when receiving messages
+  create_group_on_invite: true
+  # Backfill settings
+  backfill:
+    enable: true
+    msc2716: false
+    double_puppet_backfill: false
+    normal_groups: true
+    unread_hours_threshold: 720
+    initial_limit: 50
+    missed_limit: 100
+  management_room_text:
+    welcome: |
+      Hello! I'm a Telegram bridge bot.
+
+      **To log in:**
+      1. Send `login`
+      2. Enter your phone number (with country code, e.g. +1234567890)
+      3. Enter the verification code sent to your Telegram app
+
+      Note: This bridge requires API credentials from https://my.telegram.org
+      (already configured if you're seeing this message)
+
+      Docs: https://docs.mau.fi/bridges/python/telegram/authentication.html
+    welcome_connected: You're connected to Telegram.
+    welcome_unconnected: Use `login` to connect your Telegram account.
+  permissions:
+    "*": relaybot
+    "{{.ServerName}}": user
+    "@{{.AdminUser}}:{{.ServerName}}": admin
+
+logging:
+  version: 1
+  formatters:
+    colored:
+      (): mautrix_telegram.util.ColorFormatter
+      format: "[%(asctime)s] [%(levelname)s@%(name)s] %(message)s"
+  handlers:
+    console:
+      class: logging.StreamHandler
+      formatter: colored
+  loggers:
+    mau:
+      level: INFO
+    telethon:
+      level: INFO
+    aiohttp:
+      level: INFO
+  root:
+    level: INFO
+    handlers: [console]

@@ -1,0 +1,97 @@
+# Network-specific config options
+network:
+    os_name: Muxchat WhatsApp bridge
+    browser_name: unknown
+    displayname_template: '{{`{{or .BusinessName .PushName .Phone "Unknown user"}} (WA)`}}'
+    call_start_notices: true
+    identity_change_notices: false
+    send_presence_on_typing: false
+    enable_status_broadcast: false
+    disable_status_broadcast_send: true
+    mute_status_broadcast: true
+    pinned_tag: m.favourite
+    archive_tag: m.lowpriority
+    whatsapp_thumbnail: false
+    url_previews: false
+    force_active_delivery_receipts: false
+    initial_auto_reconnect: true
+    history_sync:
+        max_initial_conversations: -1
+        request_full_sync: true
+        dispatch_wait: 30s
+        media_requests:
+            auto_request_media: true
+            request_method: immediate
+
+# Bridge settings
+bridge:
+    command_prefix: '!wa'
+    personal_filtering_spaces: true
+    private_chat_portal_meta: true
+    management_room_text:
+        welcome: |
+            Hello! I'm a WhatsApp bridge bot.
+
+            **To log in:**
+            - `login qr` - Scan QR code with WhatsApp (Settings → Linked Devices)
+            - `login phone` - Use 8-letter pairing code instead
+
+            Docs: https://docs.mau.fi/bridges/go/whatsapp/authentication.html
+            Alternative: https://github.com/mautrix/manager
+        welcome_connected: "You're connected to WhatsApp."
+        welcome_unconnected: "Use `login qr` to connect your WhatsApp account."
+    permissions:
+        "*": relay
+        "{{.ServerName}}": user
+        "@{{.AdminUser}}:{{.ServerName}}": admin
+
+# Database config - TOP LEVEL
+database:
+    type: sqlite3-fk-wal
+    uri: file:/data/mautrix-whatsapp.db?_txlock=immediate
+
+# Homeserver details
+homeserver:
+    address: http://synapse:8008
+    domain: {{.ServerName}}
+    software: standard
+    async_media: false
+
+# Appservice details
+appservice:
+    address: http://mautrix-whatsapp:{{.Port}}
+    hostname: 0.0.0.0
+    port: {{.Port}}
+    id: whatsapp
+    bot:
+        username: {{.BotUsername}}
+        displayname: WhatsApp bridge bot
+    ephemeral_events: true
+    async_transactions: false
+    as_token: {{.ASToken}}
+    hs_token: {{.HSToken}}
+    username_template: whatsapp_{{`{{.}}`}}
+
+# Matrix connector settings
+matrix:
+    message_status_events: false
+    delivery_receipts: true
+    message_error_notices: true
+
+# Backfill settings
+backfill:
+    enabled: true
+    max_initial_messages: 50
+    max_catchup_messages: 500
+
+# Double puppeting - makes your messages appear as you, not ghost users
+double_puppet:
+    secrets:
+        {{.ServerName}}: "{{.DoublePuppetSecret}}"
+
+# Logging config
+logging:
+    min_level: info
+    writers:
+        - type: stdout
+          format: pretty-colored
