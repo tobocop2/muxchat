@@ -7,11 +7,15 @@ Cookie extraction helpers for bridges that require manual authentication.
 - Signal (`login`)
 - Discord (`login-qr`)
 - Google Messages (`login`)
+- Bluesky (`login` with username/password)
 
 These helpers are only needed for bridges that require cookie/token extraction:
 - **Google Chat** - requires Google Workspace cookies
 - **Google Voice** - requires Google account cookies
 - **Slack** - requires xoxc token + xoxd cookie
+- **Meta** - requires Facebook cookies (c_user, xs, datr)
+- **Twitter** - requires ct0 + auth_token cookies
+- **LinkedIn** - requires li_at + JSESSIONID cookies
 
 ## Alternative: mautrix-manager
 
@@ -48,6 +52,27 @@ npm run slack
 # or: node slack.js
 ```
 Opens Chrome to app.slack.com. Log in to your workspace. Token and cookie are extracted. The full `login token <token> <cookie>` command is copied to clipboard. Paste it to @slackbot.
+
+### Meta (Facebook/Instagram)
+```bash
+npm run meta
+# or: node meta.js
+```
+Opens Chrome to facebook.com. Log in with your Facebook account. Cookies are extracted and formatted as a cURL command. Send `login-cookies` to @metabot, then paste the cURL command when prompted.
+
+### Twitter/X
+```bash
+npm run twitter
+# or: node twitter.js
+```
+Opens Chrome to twitter.com. Log in with your Twitter account. The `login <ct0> <auth_token>` command is copied to clipboard. Paste it to @twitterbot.
+
+### LinkedIn
+```bash
+npm run linkedin
+# or: node linkedin.js
+```
+Opens Chrome to linkedin.com. Log in with your LinkedIn account. Cookies are extracted and formatted as a cURL command. Send `login-cookies` to @linkedinbot, then paste the cURL command when prompted.
 
 ## How it works
 

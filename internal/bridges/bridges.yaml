@@ -69,9 +69,9 @@ googlechat:
   note: Requires cookie extraction
   login_instructions: |
     1. Chat with @googlechatbot:SERVER
-    2. Run helper: cd helpers && npm install && node googlechat.js
-    3. Paste the JSON cookies to the bot
+    2. Extract cookies and paste JSON to the bot
 
+    Helper: https://github.com/tobocop2/muxbee/tree/main/scripts/cookie-helpers
     Alternative: https://github.com/mautrix/manager
 
 gvoice:
@@ -80,10 +80,10 @@ gvoice:
   note: Requires cookie extraction
   login_instructions: |
     1. Chat with @gvoicebot:SERVER
-    2. Run helper: cd helpers && npm install && node gvoice.js
-    3. Paste the JSON cookies to the bot
+    2. Extract cookies and paste JSON to the bot
 
     Docs: https://docs.mau.fi/bridges/go/gvoice/authentication.html
+    Helper: https://github.com/tobocop2/muxbee/tree/main/scripts/cookie-helpers
     Alternative: https://github.com/mautrix/manager
 
 slack:
@@ -92,10 +92,10 @@ slack:
   note: Requires token extraction
   login_instructions: |
     1. Chat with @slackbot:SERVER
-    2. Run helper: cd helpers && npm install && node slack.js
-    3. Paste the login command to the bot
+    2. Extract token/cookie and send login command
 
     Docs: https://docs.mau.fi/bridges/go/slack/authentication.html
+    Helper: https://github.com/tobocop2/muxbee/tree/main/scripts/cookie-helpers
     Alternative: https://github.com/mautrix/manager
 
 meta:
@@ -104,10 +104,10 @@ meta:
   note: Requires cookie extraction
   login_instructions: |
     1. Chat with @metabot:SERVER
-    2. Send: login
-    3. Extract cookies from browser, paste as cURL
+    2. Extract cookies and paste cURL to the bot
 
     Docs: https://docs.mau.fi/bridges/go/meta/authentication.html
+    Helper: https://github.com/tobocop2/muxbee/tree/main/scripts/cookie-helpers
     Alternative: https://github.com/mautrix/manager
 
 twitter:
@@ -116,10 +116,11 @@ twitter:
   note: Requires cookie extraction
   login_instructions: |
     1. Chat with @twitterbot:SERVER
-    2. Extract ct0 and auth_token cookies from browser
+    2. Extract ct0 and auth_token cookies
     3. Send: login <ct0> <auth_token>
 
     Docs: https://docs.mau.fi/bridges/go/twitter/authentication.html
+    Helper: https://github.com/tobocop2/muxbee/tree/main/scripts/cookie-helpers
     Alternative: https://github.com/mautrix/manager
 
 linkedin:
@@ -128,10 +129,10 @@ linkedin:
   note: Requires cookie extraction
   login_instructions: |
     1. Chat with @linkedinbot:SERVER
-    2. Send: login
-    3. Extract cookies from browser, paste as cURL
+    2. Extract cookies and paste cURL to the bot
 
     Docs: https://docs.mau.fi/bridges/go/linkedin/authentication.html
+    Helper: https://github.com/tobocop2/muxbee/tree/main/scripts/cookie-helpers
     Alternative: https://github.com/mautrix/manager
 
 # Bridges that require API credentials (user must register their own app)

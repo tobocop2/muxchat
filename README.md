@@ -119,6 +119,22 @@ Run `muxbee` for the TUI, or `muxbee --help` for CLI commands.
 
 See [USAGE.md](USAGE.md) for detailed documentation on bridges, connectivity modes, troubleshooting, and more.
 
+## Helper Scripts
+
+Some bridges require cookie/token extraction from your browser. Helper scripts (Node.js) automate this:
+
+```bash
+cd scripts/cookie-helpers && npm install
+node googlechat.js   # Google Chat cookies
+node gvoice.js       # Google Voice cookies
+node slack.js        # Slack token + cookie
+node meta.js         # Facebook/Instagram cookies
+node twitter.js      # Twitter cookies
+node linkedin.js     # LinkedIn cookies
+```
+
+See [`scripts/cookie-helpers/README.md`](scripts/cookie-helpers/README.md) for details. Alternative: [mautrix-manager](https://github.com/mautrix/manager).
+
 ## Issues
 
 Found a bug or have a feature request? Check [existing issues](https://github.com/tobocop2/muxbee/issues) first, then [open a new one](https://github.com/tobocop2/muxbee/issues/new) if it doesn't exist.

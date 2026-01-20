@@ -36,16 +36,16 @@ Sign into Element with your admin credentials. Start a chat with any bridge bot 
 
 ### Cookie Extraction Required
 
-These bridges require extracting cookies from your browser. Use the included helper scripts or [mautrix-manager](https://github.com/mautrix/manager).
+These bridges require extracting cookies from your browser. Use the included helper scripts (Node.js) or [mautrix-manager](https://github.com/mautrix/manager).
 
 | Bridge | Description | Helper |
 |--------|-------------|--------|
-| **Google Chat** | Google Workspace | `node helpers/googlechat.js` |
-| **Google Voice** | SMS/calls via GV | `node helpers/gvoice.js` |
-| **Slack** | Slack workspaces | `node helpers/slack.js` |
-| **Meta** | Facebook/Instagram | Manual cURL |
-| **Twitter** | Twitter/X DMs | Manual cookies |
-| **LinkedIn** | LinkedIn messages | Manual cURL |
+| **Google Chat** | Google Workspace | `node scripts/cookie-helpers/googlechat.js` |
+| **Google Voice** | SMS/calls via GV | `node scripts/cookie-helpers/gvoice.js` |
+| **Slack** | Slack workspaces | `node scripts/cookie-helpers/slack.js` |
+| **Meta** | Facebook/Instagram | `node scripts/cookie-helpers/meta.js` |
+| **Twitter** | Twitter/X DMs | `node scripts/cookie-helpers/twitter.js` |
+| **LinkedIn** | LinkedIn messages | `node scripts/cookie-helpers/linkedin.js` |
 
 ### Requires API Credentials
 
@@ -59,15 +59,18 @@ These bridges require extracting cookies from your browser. Use the included hel
 
 ## Helper Scripts
 
-For bridges requiring cookie extraction:
+For bridges requiring cookie extraction (requires Node.js):
 
 ```bash
-cd helpers
+cd scripts/cookie-helpers
 npm install
 
 node googlechat.js    # Google Chat (Workspace)
 node gvoice.js        # Google Voice
 node slack.js         # Slack
+node meta.js          # Facebook/Instagram
+node twitter.js       # Twitter/X
+node linkedin.js      # LinkedIn
 ```
 
 Or use [mautrix-manager](https://github.com/mautrix/manager) for automated cookie extraction.

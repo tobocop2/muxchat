@@ -104,7 +104,7 @@ Bridges are organized by authentication complexity:
 **Cookie Extraction Bridges** (requires browser DevTools):
 - Google Chat, Google Voice, Meta (Facebook/Instagram), Twitter, LinkedIn, Slack
 - Extract authentication cookies from a logged-in browser session
-- Helper scripts in `helpers/` directory simplify extraction
+- Helper scripts in `scripts/cookie-helpers/` directory simplify extraction
 
 **API Credential Bridges**:
 - Telegram: Requires API ID/hash from my.telegram.org (free)

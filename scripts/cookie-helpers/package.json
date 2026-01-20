@@ -5,7 +5,10 @@
   "scripts": {
     "googlechat": "node googlechat.js",
     "gvoice": "node gvoice.js",
-    "slack": "node slack.js"
+    "slack": "node slack.js",
+    "meta": "node meta.js",
+    "twitter": "node twitter.js",
+    "linkedin": "node linkedin.js"
   },
   "dependencies": {
     "puppeteer-core": "^21.0.0"
