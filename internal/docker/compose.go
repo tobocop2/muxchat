@@ -11,6 +11,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/tobias/muxchat/internal/config"
@@ -32,6 +33,7 @@ type ServiceStatus struct {
 	State   string
 	Health  string
 	Running bool
+	Version string
 }
 
 // New creates a new Compose instance
@@ -88,6 +90,20 @@ func (c *Compose) Up(profiles []string) error {
 	return cmd.Run()
 }
 
+// UpForceRecreate starts services and forces container recreation (for updates)
+func (c *Compose) UpForceRecreate(profiles []string) error {
+	args := []string{}
+	for _, p := range profiles {
+		args = append(args, "--profile", p)
+	}
+	args = append(args, "up", "-d", "--force-recreate")
+
+	cmd := c.buildCommand(args...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
+}
+
 // UpQuiet starts services without output (for background/TUI use)
 func (c *Compose) UpQuiet(profiles []string) error {
 	args := []string{}
@@ -95,6 +111,18 @@ func (c *Compose) UpQuiet(profiles []string) error {
 		args = append(args, "--profile", p)
 	}
 	args = append(args, "up", "-d", "--quiet-pull")
+
+	cmd := c.buildCommand(args...)
+	return cmd.Run()
+}
+
+// UpForceRecreateQuiet starts services with force recreate, without output
+func (c *Compose) UpForceRecreateQuiet(profiles []string) error {
+	args := []string{}
+	for _, p := range profiles {
+		args = append(args, "--profile", p)
+	}
+	args = append(args, "up", "-d", "--force-recreate", "--quiet-pull")
 
 	cmd := c.buildCommand(args...)
 	return cmd.Run()
@@ -145,7 +173,16 @@ func (c *Compose) Status() ([]ServiceStatus, error) {
 		return nil, nil
 	}
 
-	var statuses []ServiceStatus
+	// First pass: collect all services
+	type svcInfo struct {
+		Name    string `json:"Name"`
+		State   string `json:"State"`
+		Health  string `json:"Health"`
+		Image   string `json:"Image"`
+		Service string `json:"Service"`
+	}
+	var services []svcInfo
+
 	scanner := bufio.NewScanner(&out)
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -153,24 +190,111 @@ func (c *Compose) Status() ([]ServiceStatus, error) {
 			continue
 		}
 
-		var svc struct {
-			Name   string `json:"Name"`
-			State  string `json:"State"`
-			Health string `json:"Health"`
-		}
+		var svc svcInfo
 		if err := json.Unmarshal([]byte(line), &svc); err != nil {
 			continue
 		}
+		services = append(services, svc)
+	}
 
+	// Fetch versions in parallel for running containers
+	versions := make([]string, len(services))
+	var wg sync.WaitGroup
+	for i, svc := range services {
+		if svc.State != "running" {
+			continue
+		}
+		wg.Add(1)
+		go func(idx int, s svcInfo) {
+			defer wg.Done()
+			versions[idx] = getContainerVersion(s.Name, s.Service, s.Image)
+		}(i, svc)
+	}
+	wg.Wait()
+
+	// Build result
+	var statuses []ServiceStatus
+	for i, svc := range services {
 		statuses = append(statuses, ServiceStatus{
 			Name:    svc.Name,
 			State:   svc.State,
 			Health:  svc.Health,
 			Running: svc.State == "running",
+			Version: versions[i],
 		})
 	}
 
 	return statuses, nil
+}
+
+// getContainerVersion attempts to get the version of a container
+func getContainerVersion(containerName, service, image string) string {
+	// First try the OCI version label
+	cmd := exec.Command("docker", "inspect", containerName,
+		"--format", `{{index .Config.Labels "org.opencontainers.image.version"}}`)
+	out, err := cmd.Output()
+	if err == nil {
+		version := strings.TrimSpace(string(out))
+		if version != "" && version != "<no value>" {
+			return cleanVersion(version)
+		}
+	}
+
+	// For images with explicit version tags (e.g., postgres:17), extract from image
+	if idx := strings.LastIndex(image, ":"); idx != -1 {
+		tag := image[idx+1:]
+		if tag != "latest" && tag != "" {
+			return tag
+		}
+	}
+
+	// For mautrix bridges, try multiple methods
+	if strings.HasPrefix(service, "mautrix-") {
+		// Method 1: Try running the Go binary with --version
+		binary := "/usr/bin/" + service
+		cmd = exec.Command("docker", "exec", containerName, binary, "--version")
+		out, err = cmd.Output()
+		if err == nil {
+			// Parse "mautrix-discord 0.7.5+dev.11b1ea5a (Nov 25 2025...)"
+			// or "mautrix-whatsapp v26.01+dev.4d9366c2 (built at...)"
+			version := strings.TrimSpace(string(out))
+			parts := strings.Fields(version)
+			if len(parts) >= 2 {
+				v := parts[1]
+				// Strip +dev.xxx suffix
+				if idx := strings.Index(v, "+"); idx != -1 {
+					v = v[:idx]
+				}
+				return cleanVersion(v)
+			}
+		}
+
+		// Method 2: Try pip show for Python bridges
+		pipPkg := strings.Replace(service, "-", "_", 1) // mautrix-telegram -> mautrix_telegram
+		cmd = exec.Command("docker", "exec", containerName, "pip", "show", pipPkg)
+		out, err = cmd.Output()
+		if err == nil {
+			// Parse "Version: 0.5.2+dev.xxx"
+			for _, line := range strings.Split(string(out), "\n") {
+				if strings.HasPrefix(line, "Version:") {
+					v := strings.TrimSpace(strings.TrimPrefix(line, "Version:"))
+					// Strip +dev.xxx suffix
+					if idx := strings.Index(v, "+"); idx != -1 {
+						v = v[:idx]
+					}
+					return cleanVersion(v)
+				}
+			}
+		}
+	}
+
+	return ""
+}
+
+// cleanVersion removes common prefixes like "v" from version strings
+func cleanVersion(version string) string {
+	version = strings.TrimPrefix(version, "v")
+	return version
 }
 
 // IsRunning checks if services are currently running

@@ -3,6 +3,8 @@
 [![CI](https://github.com/tobocop2/muxchat/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tobocop2/muxchat/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/tobocop2/muxchat/graph/badge.svg)](https://codecov.io/gh/tobocop2/muxchat)
 
+> **Early Development:** Bridges may break when upstream images update. Use `muxchat update` (or `u` in TUI) to pull latest images and restart.
+
 Run one command. Toggle your bridges. Wait. Your chats appear.
 
 ![muxchat demo](assets/demo.gif)

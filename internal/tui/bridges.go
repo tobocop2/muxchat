@@ -101,9 +101,6 @@ func (m *BridgesModel) Update(msg tea.Msg, cfg *config.Config) (*BridgesModel, t
 		return m, nil
 
 	case tea.KeyMsg:
-		if m.isLoading {
-			return m, nil
-		}
 		switch msg.String() {
 		case "up", "k":
 			if m.cursor > 0 {
@@ -114,6 +111,10 @@ func (m *BridgesModel) Update(msg tea.Msg, cfg *config.Config) (*BridgesModel, t
 				m.cursor++
 			}
 		case "enter", " ":
+			// Block starting new operations while one is in progress
+			if m.isLoading {
+				return m, nil
+			}
 			if cfg != nil && m.cursor < len(m.bridges) {
 				bridge := m.bridges[m.cursor]
 

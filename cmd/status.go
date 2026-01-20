@@ -50,7 +50,11 @@ func runStatus(cmd *cobra.Command, args []string) error {
 		}
 
 		serviceName := docker.ParseServiceName(s.Name)
-		fmt.Printf("  %-20s %s\n", serviceName, status)
+		version := ""
+		if s.Version != "" {
+			version = fmt.Sprintf(" %s", s.Version)
+		}
+		fmt.Printf("  %-20s%-10s %s\n", serviceName, version, status)
 	}
 
 	fmt.Println()

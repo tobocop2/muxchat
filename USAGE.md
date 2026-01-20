@@ -130,6 +130,17 @@ Configuration and data follow XDG conventions:
 
 Override with `XDG_CONFIG_HOME` and `XDG_DATA_HOME`.
 
+## Updating Services
+
+Bridges use `:latest` Docker images. Pull updates when things break or you want new versions:
+
+```bash
+muxchat update    # CLI
+# or press 'u' in TUI dashboard
+```
+
+This pulls latest images and restarts all services. Run `muxchat status` to see current versions.
+
 ## Troubleshooting
 
 **Services won't start:**
@@ -165,7 +176,8 @@ muxchat                   Launch the interactive TUI
 muxchat init              Initialize configuration
 muxchat up                Start all services
 muxchat down              Stop all services
-muxchat status            Show service status
+muxchat status            Show service status with versions
+muxchat update            Pull latest images and restart
 muxchat open              Open Element Web in browser
 ```
 

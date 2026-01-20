@@ -70,6 +70,10 @@ var (
 
 	SuccessStyle = lipgloss.NewStyle().
 			Foreground(ColorSecondary)
+
+	// Version - subtle dim color
+	VersionStyle = lipgloss.NewStyle().
+			Foreground(ColorDim)
 )
 
 // Helper functions

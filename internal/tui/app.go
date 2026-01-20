@@ -202,9 +202,80 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.compose = docker.New(cfg)
 			}
 		}
+
+	// Dashboard and bridges operation messages are handled here (not delegated to screens)
+	// so that operations continue even when the user navigates to a different screen.
+	// This allows async operation completion regardless of which screen is active.
+
+	case servicesUpdatedMsg:
+		// Handle dashboard operation completion regardless of active screen
+		m.dashboard.isLoading = false
+		m.dashboard.loadingOp = ""
+		m.dashboard.loadingStep = ""
+		m.dashboard.services = msg.services
+		m.dashboard.lastUpdated = time.Now()
+		m.services = msg.services
+		return m, nil
+
+	case dashboardSpinnerMsg:
+		// Handle dashboard spinner regardless of active screen
+		if m.dashboard.isLoading {
+			m.dashboard.spinnerIdx = (m.dashboard.spinnerIdx + 1) % len(dashboardSpinnerFrames)
+			return m, m.dashboard.spinnerTick()
+		}
+		return m, nil
+
+	case updateStepMsg:
+		// Handle update progress regardless of active screen
+		if msg.done {
+			m.dashboard.isLoading = false
+			m.dashboard.loadingOp = ""
+			m.dashboard.loadingStep = ""
+			m.dashboard.services = msg.services
+			m.dashboard.lastUpdated = time.Now()
+			m.dashboard.updateChan = nil
+			m.services = msg.services
+			return m, nil
+		}
+		if msg.step != "" {
+			m.dashboard.loadingStep = msg.step
+		}
+		return m, m.dashboard.checkUpdateProgress()
+
+	case bridgeToggledMsg:
+		// Handle bridge toggle completion regardless of active screen
+		m.bridges.isLoading = false
+		m.bridges.loadingStep = ""
+		m.bridges.lastError = msg.err
+		return m, nil
+
+	case bridgeSpinnerMsg:
+		// Handle bridges spinner regardless of active screen
+		if m.bridges.isLoading {
+			m.bridges.spinnerIdx = (m.bridges.spinnerIdx + 1) % len(spinnerFrames)
+			return m, m.bridges.spinnerTick()
+		}
+		return m, nil
+
+	case bridgeCheckResultMsg:
+		// Handle bridge result check regardless of active screen
+		if m.bridges.resultChan != nil {
+			select {
+			case result := <-m.bridges.resultChan:
+				m.bridges.isLoading = false
+				m.bridges.loadingStep = ""
+				m.bridges.lastError = result.err
+				return m, nil
+			default:
+				if m.bridges.isLoading {
+					return m, tea.Batch(m.bridges.spinnerTick(), m.bridges.checkResult())
+				}
+			}
+		}
+		return m, nil
 	}
 
-	// Delegate to active screen
+	// Delegate to active screen for other messages
 	var cmd tea.Cmd
 	switch m.screen {
 	case ScreenDashboard:
@@ -294,6 +365,7 @@ func (m Model) renderHelp() string {
 			RenderKey("s", "start"),
 			RenderKey("x", "stop"),
 			RenderKey("r", "restart"),
+			RenderKey("u", "update"),
 			RenderKey("e", "element"),
 			RenderKey("o", "open"),
 		}

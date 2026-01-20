@@ -37,7 +37,7 @@ func TestRootHasSubcommands(t *testing.T) {
 	}
 
 	// Check expected subcommands exist
-	expected := []string{"init", "up", "down", "status", "bridge", "logs", "backup", "restore", "nuke", "config", "health", "open", "setup-bots", "tui"}
+	expected := []string{"init", "up", "down", "status", "bridge", "logs", "backup", "restore", "nuke", "config", "health", "open", "setup-bots", "tui", "update"}
 	cmdNames := make(map[string]bool)
 	for _, cmd := range subcommands {
 		cmdNames[cmd.Name()] = true
@@ -232,6 +232,18 @@ func TestHealthHelpOutput(t *testing.T) {
 	}
 }
 
+func TestUpdateHelpOutput(t *testing.T) {
+	buf := new(bytes.Buffer)
+	rootCmd.SetOut(buf)
+	rootCmd.SetArgs([]string{"update", "--help"})
+	rootCmd.Execute()
+
+	output := buf.String()
+	if !strings.Contains(output, "update") && !strings.Contains(output, "Update") {
+		t.Error("expected help output to mention update")
+	}
+}
+
 func TestConfigShowHelpOutput(t *testing.T) {
 	buf := new(bytes.Buffer)
 	rootCmd.SetOut(buf)
@@ -313,5 +325,17 @@ func TestBridgeDisableInvalidBridge(t *testing.T) {
 func TestBridgeLoginInvalidBridge(t *testing.T) {
 	if bridgeLoginCmd.RunE == nil {
 		t.Error("expected bridgeLoginCmd to have RunE function")
+	}
+}
+
+func TestUpdateCommand(t *testing.T) {
+	if updateCmd == nil {
+		t.Fatal("updateCmd is nil")
+	}
+	if updateCmd.Use != "update" {
+		t.Errorf("expected Use to be 'update', got '%s'", updateCmd.Use)
+	}
+	if updateCmd.RunE == nil {
+		t.Error("expected updateCmd to have RunE function")
 	}
 }
