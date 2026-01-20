@@ -1,4 +1,4 @@
-# muxchat
+# muxchat (name still pending)
 
 [![CI](https://github.com/tobocop2/muxchat/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tobocop2/muxchat/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/tobocop2/muxchat/graph/badge.svg)](https://codecov.io/gh/tobocop2/muxchat)
@@ -17,7 +17,7 @@ That's it. The TUI walks you through setup, starts services, and you're done. To
 
 ## What It Does
 
-muxchat is a unified chat solution — a single binary that generates and manages a self-hosted Matrix server with messaging bridges. All your chats from different platforms appear in one place. No config files to manage, no secrets to store — just run it.
+muxchat is a single binary that sets up a self-hosted Matrix server with messaging bridges. All your chats from different platforms in one place. No config files to edit, no secrets to manage — just run it.
 
 - **Synapse** (Matrix homeserver)
 - **Element Web** (bundled chat interface — disable via TUI or `muxchat init --no-element`)
@@ -25,16 +25,22 @@ muxchat is a unified chat solution — a single binary that generates and manage
 
 Like [Bitlbee](https://www.bitlbee.org/), you interact with bridge bots to link accounts (e.g., message `@whatsappbot` and follow the prompts). Unlike Bitlbee, messages sync in real-time, you don't miss messages when offline, and modern features like reactions, threads, and encryption work.
 
+### Linking Your Accounts
+
+Message a bridge bot in Element to connect your accounts. Each bot walks you through authentication.
+
+<img src="assets/element.gif" alt="Bridge bots in Element" width="1000">
+
 ### Sane Defaults
 
-muxchat configures Synapse and bridges with sensible defaults so things just work:
+muxchat configures Synapse and bridges so things just work:
 
-- **Auto-accept invites** — Room invites from bridges are automatically accepted
-- **High rate limits** — Bulk syncs from bridges won't hit 429 errors
-- **Personal filtering spaces** — Bridges create Matrix spaces to organize your chats by platform
-- **Full history sync** — WhatsApp and other bridges sync your complete conversation history
-- **Double puppeting** — Your outgoing messages appear as you, not as a ghost user
-- **Bot auto-setup** — `muxchat setup-bots` creates DM rooms with all your bridge bots
+- **Auto-accept invites** — New chat rooms from bridges appear automatically, no manual accept needed
+- **High rate limits** — Sync thousands of messages without getting throttled
+- **Personal filtering spaces** — WhatsApp chats grouped together, Discord together, etc.
+- **Full history sync** — Get your old messages, not just new ones
+- **Double puppeting** — Messages you send from your phone show up as "you" in Element
+- **Bot auto-setup** — Bridge bots are ready to message after running `muxchat setup-bots`
 
 ### Why not just a docker-compose.yml?
 
@@ -43,7 +49,7 @@ A static docker-compose.yml can't:
 - **Register bridges dynamically** — When you enable a bridge, Synapse needs its registration.yaml added and a restart.
 - **Adapt to your setup** — Domain, ports, which bridges — these require regenerating config files that reference each other.
 
-muxchat handles all of this. You never touch config files. Everything is generated from your choices and can be regenerated anytime. Portable, reproducible, no config management.
+muxchat handles all of this. Everything is generated from your choices and can be regenerated anytime.
 
 ## Background
 
@@ -51,7 +57,7 @@ Matrix is difficult to set up. Synapse alone has hundreds of configuration optio
 
 [Bitlbee](https://www.bitlbee.org/) with libpurple was a great solution for years — an orchestrator for chat plugins, all accessible via IRC. muxchat is similar in spirit: an orchestrator for [mautrix](https://github.com/mautrix) bridges, all accessible via Matrix. Bitlbee's limitations: bridges poll (delayed messages), you miss messages when disconnected, no encryption, no reactions/threads/edits, and formatting gets mangled. Matrix handles all of this.
 
-[Beeper](https://beeper.com) also solves this problem with a polished app and cloud-hosted bridges. muxchat is for tinkerers who want full control over their chat infrastructure — no app installs, no cloud dependencies, everything runs on your hardware. There's some manual setup (messaging bridge bots and following instructions), but it's simple for bridges like WhatsApp, Discord, and Google Messages that support QR code login. The bundled Element Web interface provides a solid out-of-the-box experience that's sufficient for most people who just want all their messages in one place. You can also point Beeper (or any Matrix client) at the Synapse server muxchat sets up — though this is untested.
+[Beeper](https://beeper.com) also solves this problem with a polished app and cloud-hosted bridges. muxchat is for tinkerers who want full control — no app installs, no cloud dependencies, runs on your hardware. There's some manual setup (messaging bridge bots), but it's simple for QR code bridges like WhatsApp, Discord, and Google Messages. You can also point Beeper or any Matrix client at the Synapse server muxchat sets up (untested).
 
 ## Supported Bridges
 

@@ -13,10 +13,11 @@ muxchat open                      # Open Element
 
 Sign into Element with your admin credentials. Start a chat with any bridge bot (e.g., `@whatsappbot:localhost`) — the bot will tell you how to authenticate.
 
+<img src="assets/element.gif" alt="Element with bridge bots" width="1000">
+
 **Finding your admin credentials:**
-- Shown once during `muxchat init`
-- Shown on each `muxchat up`
-- Retrieve anytime with `muxchat config show --show-secrets`
+- Shown during `muxchat init` and `muxchat up`
+- **Missed it?** Run `muxchat config show --show-secrets` and look for the `admin` section with `username` and `password`
 
 > **Note:** If you change your password in Element, the stored password becomes stale. muxchat doesn't sync password changes from Synapse.
 
