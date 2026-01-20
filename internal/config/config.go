@@ -10,7 +10,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// Config represents the muxchat settings
+// Config represents the muxbee settings
 type Config struct {
 	ServerName         string                  `yaml:"server_name"`
 	ConnectivityMode   string                  `yaml:"connectivity_mode"` // local, private, public

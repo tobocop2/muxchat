@@ -1,5 +1,5 @@
 {
-  "name": "muxchat-helpers",
+  "name": "muxbee-helpers",
   "version": "1.0.0",
   "description": "Cookie extraction helpers for mautrix bridges that require manual authentication",
   "scripts": {

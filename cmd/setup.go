@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/tobias/muxchat/internal/config"
-	"github.com/tobias/muxchat/internal/matrix"
+	"github.com/tobias/muxbee/internal/config"
+	"github.com/tobias/muxbee/internal/matrix"
 )
 
 var setupBotsCmd = &cobra.Command{
@@ -27,12 +27,12 @@ func init() {
 func runSetupBots(cmd *cobra.Command, args []string) error {
 	cfg, err := config.Load()
 	if err != nil {
-		return fmt.Errorf("failed to load config: %w\nRun 'muxchat init' first", err)
+		return fmt.Errorf("failed to load config: %w\nRun 'muxbee init' first", err)
 	}
 
 	if len(cfg.EnabledBridges) == 0 {
 		fmt.Println("No bridges enabled.")
-		fmt.Println("Enable bridges with: muxchat bridge enable <name>")
+		fmt.Println("Enable bridges with: muxbee bridge enable <name>")
 		return nil
 	}
 

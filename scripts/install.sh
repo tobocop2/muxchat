@@ -1,12 +1,12 @@
 #!/bin/sh
 
-# muxchat Installer
+# muxbee Installer
 # Downloads the correct binary for your platform to the current directory
 #
-# Usage: curl -fsSL https://raw.githubusercontent.com/tobocop2/muxchat/main/scripts/install.sh | sh
+# Usage: curl -fsSL https://raw.githubusercontent.com/tobocop2/muxbee/main/scripts/install.sh | sh
 
-REPO="tobocop2/muxchat"
-BINARY_NAME="muxchat"
+REPO="tobocop2/muxbee"
+BINARY_NAME="muxbee"
 
 info() { echo "==> $1"; }
 error() { echo "Error: $1" >&2; exit 1; }
@@ -41,20 +41,20 @@ get_latest_version() {
 # Download binary
 download() {
     URL="https://github.com/${REPO}/releases/download/${VERSION}/${BINARY_NAME}-${PLATFORM}"
-    info "Downloading muxchat ${VERSION} for ${PLATFORM}..."
+    info "Downloading muxbee ${VERSION} for ${PLATFORM}..."
 
-    if ! curl -fSL "$URL" -o muxchat; then
+    if ! curl -fSL "$URL" -o muxbee; then
         error "Download failed"
     fi
-    chmod +x muxchat
+    chmod +x muxbee
 
-    info "Downloaded: ./muxchat"
+    info "Downloaded: ./muxbee"
     echo ""
     echo "Move it to your PATH, e.g.:"
-    echo "  sudo mv muxchat /usr/local/bin/    # system-wide"
-    echo "  mv muxchat ~/.local/bin/           # user only"
+    echo "  sudo mv muxbee /usr/local/bin/    # system-wide"
+    echo "  mv muxbee ~/.local/bin/           # user only"
     echo ""
-    ./muxchat --version
+    ./muxbee --version
 }
 
 detect_platform

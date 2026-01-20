@@ -1,4 +1,4 @@
-# muxchat demo
+# muxbee demo
 # Run with: vhs demo.tape
 
 Output demo.gif
@@ -10,11 +10,11 @@ Set Height 700
 Set Padding 10
 Set TypingSpeed 50ms
 
-# Make sure muxchat is built and config exists
-# Prerequisites: go build -o muxchat . && ./muxchat init
+# Make sure muxbee is built and config exists
+# Prerequisites: go build -o muxbee . && ./muxbee init
 
-# Start muxchat
-Type "./muxchat"
+# Start muxbee
+Type "./muxbee"
 Enter
 Sleep 2s
 

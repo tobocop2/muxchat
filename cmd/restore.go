@@ -10,13 +10,13 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/tobias/muxchat/internal/config"
+	"github.com/tobias/muxbee/internal/config"
 )
 
 var restoreCmd = &cobra.Command{
 	Use:   "restore <backup-file>",
-	Short: "Restore muxchat from a backup",
-	Long: `Restore muxchat data and configuration from a backup file.
+	Short: "Restore muxbee from a backup",
+	Long: `Restore muxbee data and configuration from a backup file.
 
 This will overwrite existing configuration and data.
 Services should be stopped before restoring.`,
@@ -49,7 +49,7 @@ func runRestore(cmd *cobra.Command, args []string) error {
 		fmt.Printf("  Config: %s\n", configDir)
 		fmt.Printf("  Data:   %s\n", dataDir)
 		fmt.Println()
-		fmt.Println("Use --force to proceed, or run 'muxchat down' first.")
+		fmt.Println("Use --force to proceed, or run 'muxbee down' first.")
 		return nil
 	}
 
@@ -118,7 +118,7 @@ func runRestore(cmd *cobra.Command, args []string) error {
 
 	fmt.Println("Restore complete!")
 	fmt.Println()
-	fmt.Println("Run 'muxchat up' to start services.")
+	fmt.Println("Run 'muxbee up' to start services.")
 
 	return nil
 }

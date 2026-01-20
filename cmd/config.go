@@ -4,27 +4,27 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/tobias/muxchat/internal/config"
+	"github.com/tobias/muxbee/internal/config"
 	"gopkg.in/yaml.v3"
 )
 
 var configCmd = &cobra.Command{
 	Use:   "config",
-	Short: "Manage muxchat configuration",
-	Long:  `View and manage muxchat configuration.`,
+	Short: "Manage muxbee configuration",
+	Long:  `View and manage muxbee configuration.`,
 }
 
 var configShowCmd = &cobra.Command{
 	Use:   "show",
 	Short: "Show current configuration",
-	Long:  `Display the current muxchat configuration.`,
+	Long:  `Display the current muxbee configuration.`,
 	RunE:  runConfigShow,
 }
 
 var configPathCmd = &cobra.Command{
 	Use:   "path",
 	Short: "Show configuration paths",
-	Long:  `Display the paths to muxchat configuration and data directories.`,
+	Long:  `Display the paths to muxbee configuration and data directories.`,
 	RunE:  runConfigPath,
 }
 
@@ -41,7 +41,7 @@ func init() {
 func runConfigShow(cmd *cobra.Command, args []string) error {
 	cfg, err := config.Load()
 	if err != nil {
-		return fmt.Errorf("failed to load config: %w\nRun 'muxchat init' first", err)
+		return fmt.Errorf("failed to load config: %w\nRun 'muxbee init' first", err)
 	}
 
 	// Mask passwords for display unless --show-secrets is set

@@ -9,16 +9,16 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/tobias/muxchat/internal/config"
-	"github.com/tobias/muxchat/internal/docker"
-	"github.com/tobias/muxchat/internal/generator"
-	"github.com/tobias/muxchat/internal/matrix"
+	"github.com/tobias/muxbee/internal/config"
+	"github.com/tobias/muxbee/internal/docker"
+	"github.com/tobias/muxbee/internal/generator"
+	"github.com/tobias/muxbee/internal/matrix"
 )
 
 var upCmd = &cobra.Command{
 	Use:   "up",
-	Short: "Start muxchat services",
-	Long: `Start all muxchat services including the Matrix homeserver,
+	Short: "Start muxbee services",
+	Long: `Start all muxbee services including the Matrix homeserver,
 Element Web client, and any enabled bridges.`,
 	RunE: runUp,
 }
@@ -33,7 +33,7 @@ func init() {
 func runUp(cmd *cobra.Command, args []string) error {
 	cfg, err := config.Load()
 	if err != nil {
-		return fmt.Errorf("failed to load config: %w\nRun 'muxchat init' first", err)
+		return fmt.Errorf("failed to load config: %w\nRun 'muxbee init' first", err)
 	}
 
 	gen := generator.New()
@@ -83,8 +83,8 @@ func runUp(cmd *cobra.Command, args []string) error {
 		fmt.Println()
 	}
 
-	fmt.Println("Run 'muxchat open' to launch Element in your browser.")
-	fmt.Println("Run 'muxchat status' to check service status.")
+	fmt.Println("Run 'muxbee open' to launch Element in your browser.")
+	fmt.Println("Run 'muxbee status' to check service status.")
 
 	return nil
 }
@@ -98,7 +98,7 @@ func setupAdminUser(cfg *config.Config) error {
 	fmt.Println("Setting up admin user...")
 	time.Sleep(3 * time.Second) // Wait for Synapse to be ready
 
-	cmd := exec.Command("docker", "exec", "muxchat-synapse-1",
+	cmd := exec.Command("docker", "exec", "muxbee-synapse-1",
 		"register_new_matrix_user",
 		"-u", cfg.Admin.Username,
 		"-p", cfg.Admin.Password,

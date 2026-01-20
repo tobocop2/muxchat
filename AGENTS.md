@@ -1,13 +1,13 @@
 # Agent Instructions
 
-Quick reference for AI coding assistants working on muxchat.
+Quick reference for AI coding assistants working on muxbee.
 
 ## Commands
 
 ```bash
-go build -o muxchat .    # Build
+go build -o muxbee .    # Build
 go test ./...            # Run tests
-./muxchat --version      # Verify
+./muxbee --version      # Verify
 ```
 
 ## Documentation

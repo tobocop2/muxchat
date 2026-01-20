@@ -1,4 +1,4 @@
-# Muxchat Helpers
+# Muxbee Helpers
 
 Cookie extraction helpers for bridges that require manual authentication.
 

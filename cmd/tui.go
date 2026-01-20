@@ -2,13 +2,13 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/tobias/muxchat/internal/tui"
+	"github.com/tobias/muxbee/internal/tui"
 )
 
 var tuiCmd = &cobra.Command{
 	Use:   "tui",
 	Short: "Launch the interactive TUI",
-	Long:  `Launch the interactive terminal user interface for managing muxchat.`,
+	Long:  `Launch the interactive terminal user interface for managing muxbee.`,
 	RunE:  runTUI,
 }
 

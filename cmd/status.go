@@ -4,14 +4,14 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/tobias/muxchat/internal/config"
-	"github.com/tobias/muxchat/internal/docker"
+	"github.com/tobias/muxbee/internal/config"
+	"github.com/tobias/muxbee/internal/docker"
 )
 
 var statusCmd = &cobra.Command{
 	Use:   "status",
-	Short: "Show status of muxchat services",
-	Long:  `Display the current status of all muxchat services.`,
+	Short: "Show status of muxbee services",
+	Long:  `Display the current status of all muxbee services.`,
 	RunE:  runStatus,
 }
 
@@ -22,7 +22,7 @@ func init() {
 func runStatus(cmd *cobra.Command, args []string) error {
 	cfg, err := config.Load()
 	if err != nil {
-		return fmt.Errorf("failed to load config: %w\nRun 'muxchat init' first", err)
+		return fmt.Errorf("failed to load config: %w\nRun 'muxbee init' first", err)
 	}
 
 	compose := docker.New(cfg)
@@ -33,7 +33,7 @@ func runStatus(cmd *cobra.Command, args []string) error {
 
 	if len(statuses) == 0 {
 		fmt.Println("No services running.")
-		fmt.Println("Run 'muxchat up' to start services.")
+		fmt.Println("Run 'muxbee up' to start services.")
 		return nil
 	}
 

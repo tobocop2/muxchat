@@ -1,4 +1,4 @@
-# muxchat demo - simple navigation tour
+# muxbee demo - simple navigation tour
 # Run with: vhs demo-simple.tape
 
 Output demo.gif
@@ -9,8 +9,8 @@ Set Width 1000
 Set Height 700
 Set Padding 10
 
-# Start muxchat
-Type "muxchat"
+# Start muxbee
+Type "muxbee"
 Enter
 Sleep 3s
 

@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"text/template"
 
-	"github.com/tobias/muxchat/internal/bridges"
-	"github.com/tobias/muxchat/internal/config"
+	"github.com/tobias/muxbee/internal/bridges"
+	"github.com/tobias/muxbee/internal/config"
 )
 
 //go:embed templates/*

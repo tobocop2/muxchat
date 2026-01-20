@@ -5,8 +5,8 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/tobias/muxchat/internal/config"
-	"github.com/tobias/muxchat/internal/docker"
+	"github.com/tobias/muxbee/internal/config"
+	"github.com/tobias/muxbee/internal/docker"
 )
 
 var updateCmd = &cobra.Command{

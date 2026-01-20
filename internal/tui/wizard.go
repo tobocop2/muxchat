@@ -5,9 +5,9 @@ import (
 
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/tobias/muxchat/internal/config"
-	"github.com/tobias/muxchat/internal/docker"
-	"github.com/tobias/muxchat/internal/generator"
+	"github.com/tobias/muxbee/internal/config"
+	"github.com/tobias/muxbee/internal/docker"
+	"github.com/tobias/muxbee/internal/generator"
 )
 
 // WizardStep represents a step in the setup wizard
@@ -285,7 +285,7 @@ func (m *WizardModel) View() string {
 }
 
 func (m *WizardModel) viewWelcome() string {
-	s := TitleStyle.Render("muxchat") + "\n\n"
+	s := TitleStyle.Render("muxbee") + "\n\n"
 	s += "Self-hosted Matrix server with messaging bridges.\n"
 	s += "This wizard will configure your server.\n\n"
 	s += HelpStyle.Render(RenderKey("enter", "start") + "  " + RenderKey("q", "quit"))

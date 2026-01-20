@@ -4,22 +4,22 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/tobias/muxchat/internal/config"
-	"github.com/tobias/muxchat/internal/docker"
+	"github.com/tobias/muxbee/internal/config"
+	"github.com/tobias/muxbee/internal/docker"
 )
 
 var logsCmd = &cobra.Command{
 	Use:   "logs [service]",
-	Short: "View logs from muxchat services",
-	Long: `View logs from muxchat services.
+	Short: "View logs from muxbee services",
+	Long: `View logs from muxbee services.
 
 If no service is specified, logs from all services are shown.
 
 Examples:
-  muxchat logs              # All services
-  muxchat logs synapse      # Synapse only
-  muxchat logs -f           # Follow all logs
-  muxchat logs -f synapse   # Follow Synapse logs`,
+  muxbee logs              # All services
+  muxbee logs synapse      # Synapse only
+  muxbee logs -f           # Follow all logs
+  muxbee logs -f synapse   # Follow Synapse logs`,
 	RunE: runLogs,
 }
 
@@ -38,7 +38,7 @@ func init() {
 func runLogs(cmd *cobra.Command, args []string) error {
 	cfg, err := config.Load()
 	if err != nil {
-		return fmt.Errorf("failed to load config: %w\nRun 'muxchat init' first", err)
+		return fmt.Errorf("failed to load config: %w\nRun 'muxbee init' first", err)
 	}
 
 	compose := docker.New(cfg)

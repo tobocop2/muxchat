@@ -1,4 +1,4 @@
-module github.com/tobias/muxchat
+module github.com/tobias/muxbee
 
 go 1.23.0
 

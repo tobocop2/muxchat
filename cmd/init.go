@@ -4,15 +4,15 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/tobias/muxchat/internal/config"
-	"github.com/tobias/muxchat/internal/docker"
-	"github.com/tobias/muxchat/internal/generator"
+	"github.com/tobias/muxbee/internal/config"
+	"github.com/tobias/muxbee/internal/docker"
+	"github.com/tobias/muxbee/internal/generator"
 )
 
 var initCmd = &cobra.Command{
 	Use:   "init",
-	Short: "Initialize muxchat configuration",
-	Long: `Initialize muxchat by creating configuration files and setting up
+	Short: "Initialize muxbee configuration",
+	Long: `Initialize muxbee by creating configuration files and setting up
 the Matrix homeserver environment.
 
 This command creates:
@@ -64,7 +64,7 @@ func runInit(cmd *cobra.Command, args []string) error {
 		initServerName = initDomain
 	}
 
-	fmt.Println("Initializing muxchat...")
+	fmt.Println("Initializing muxbee...")
 
 	cfg, err := config.NewDefaultConfig()
 	if err != nil {
@@ -118,10 +118,10 @@ func runInit(cmd *cobra.Command, args []string) error {
 	fmt.Printf("  Synapse URL:      %s\n", cfg.PublicBaseURL())
 	fmt.Println()
 	fmt.Println("Next steps:")
-	fmt.Println("  1. Enable bridges:  muxchat bridge enable whatsapp")
-	fmt.Println("  2. Start services:  muxchat up")
+	fmt.Println("  1. Enable bridges:  muxbee bridge enable whatsapp")
+	fmt.Println("  2. Start services:  muxbee up")
 	if cfg.IsElementEnabled() {
-		fmt.Println("  3. Open Element:    muxchat open")
+		fmt.Println("  3. Open Element:    muxbee open")
 	} else {
 		fmt.Printf("  3. Connect your Matrix client to %s\n", cfg.PublicBaseURL())
 	}

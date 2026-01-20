@@ -1,11 +1,11 @@
 # Developer Guide
 
-Code architecture and extension guide for muxchat.
+Code architecture and extension guide for muxbee.
 
 ## Package Structure
 
 ```
-muxchat/
+muxbee/
 ├── cmd/                 # CLI commands (Cobra)
 ├── internal/
 │   ├── bridges/         # Bridge registry (embedded YAML)
@@ -221,7 +221,7 @@ mautrix-mybridge:
   depends_on:
     - synapse
   networks:
-    - muxchat
+    - muxbee
   restart: unless-stopped
 ```
 
@@ -249,11 +249,11 @@ Docs: https://docs.mau.fi/bridges/go/mybridge/`,
 ### 5. Build and test
 
 ```bash
-go build -o muxchat .
-./muxchat bridge list              # Should show your bridge
-./muxchat bridge enable mybridge   # Enable it
-./muxchat up                       # Start everything
-./muxchat logs mautrix-mybridge    # Check for errors
+go build -o muxbee .
+./muxbee bridge list              # Should show your bridge
+./muxbee bridge enable mybridge   # Enable it
+./muxbee up                       # Start everything
+./muxbee logs mautrix-mybridge    # Check for errors
 ```
 
 ## Template System
@@ -261,14 +261,14 @@ go build -o muxchat .
 Templates live in `internal/generator/templates/` and are embedded at compile time.
 
 The generator creates files in two places:
-- `~/.config/muxchat/` - Configuration files (Synapse reads these)
-- `~/.local/share/muxchat/` - Data files (bridges write here)
+- `~/.config/muxbee/` - Configuration files (Synapse reads these)
+- `~/.local/share/muxbee/` - Data files (bridges write here)
 
 Bridge configs go to the data directory because bridges expect a writable `/data` mount. Bridge registrations go to both (Synapse needs them in config, bridges need them in data).
 
 ## Token Persistence
 
-Appservice tokens (AS/HS tokens) are generated once and stored in `settings.yaml`. This ensures tokens survive across `muxchat up` invocations. The generator checks for existing tokens before generating new ones:
+Appservice tokens (AS/HS tokens) are generated once and stored in `settings.yaml`. This ensures tokens survive across `muxbee up` invocations. The generator checks for existing tokens before generating new ones:
 
 ```go
 func (c *Config) GetOrCreateBridgeTokens(bridgeName string) (BridgeTokens, error) {

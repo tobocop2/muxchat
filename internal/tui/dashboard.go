@@ -7,8 +7,8 @@ import (
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/tobias/muxchat/internal/config"
-	"github.com/tobias/muxchat/internal/docker"
+	"github.com/tobias/muxbee/internal/config"
+	"github.com/tobias/muxbee/internal/docker"
 )
 
 var dashboardSpinnerFrames = []string{"⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"}
@@ -147,7 +147,7 @@ func (m *DashboardModel) View(cfg *config.Config) string {
 	var s string
 
 	// Header with server info
-	s += TitleStyle.Render("muxchat") + "  "
+	s += TitleStyle.Render("muxbee") + "  "
 	s += SubtitleStyle.Render(cfg.ServerName+" · "+cfg.ConnectivityMode) + "\n"
 
 	// Status line

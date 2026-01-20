@@ -7,14 +7,14 @@ import (
 	"strings"
 
 	"github.com/spf13/cobra"
-	"github.com/tobias/muxchat/internal/config"
-	"github.com/tobias/muxchat/internal/docker"
+	"github.com/tobias/muxbee/internal/config"
+	"github.com/tobias/muxbee/internal/docker"
 )
 
 var nukeCmd = &cobra.Command{
 	Use:   "nuke",
-	Short: "Remove all muxchat data and configuration",
-	Long: `Completely remove all muxchat data and configuration.
+	Short: "Remove all muxbee data and configuration",
+	Long: `Completely remove all muxbee data and configuration.
 
 This will:
   - Stop all running services
@@ -37,7 +37,7 @@ func runNuke(cmd *cobra.Command, args []string) error {
 	configDir := config.ConfigDir()
 	dataDir := config.DataDir()
 
-	fmt.Println("WARNING: This will permanently delete ALL muxchat data!")
+	fmt.Println("WARNING: This will permanently delete ALL muxbee data!")
 	fmt.Println()
 	fmt.Printf("  Config: %s\n", configDir)
 	fmt.Printf("  Data:   %s\n", dataDir)
@@ -80,7 +80,7 @@ func runNuke(cmd *cobra.Command, args []string) error {
 
 	fmt.Println()
 	fmt.Println("Mautrix Chat has been completely removed.")
-	fmt.Println("Run 'muxchat init' to start fresh.")
+	fmt.Println("Run 'muxbee init' to start fresh.")
 
 	return nil
 }

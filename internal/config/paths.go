@@ -8,19 +8,19 @@ import (
 // ConfigDir returns the configuration directory path following XDG spec
 func ConfigDir() string {
 	if dir := os.Getenv("XDG_CONFIG_HOME"); dir != "" {
-		return filepath.Join(dir, "muxchat")
+		return filepath.Join(dir, "muxbee")
 	}
 	home, _ := os.UserHomeDir()
-	return filepath.Join(home, ".config", "muxchat")
+	return filepath.Join(home, ".config", "muxbee")
 }
 
 // DataDir returns the data directory path following XDG spec
 func DataDir() string {
 	if dir := os.Getenv("XDG_DATA_HOME"); dir != "" {
-		return filepath.Join(dir, "muxchat")
+		return filepath.Join(dir, "muxbee")
 	}
 	home, _ := os.UserHomeDir()
-	return filepath.Join(home, ".local", "share", "muxchat")
+	return filepath.Join(home, ".local", "share", "muxbee")
 }
 
 // SettingsPath returns the path to the settings.yaml file

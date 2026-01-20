@@ -1,6 +1,6 @@
-# Contributing to muxchat
+# Contributing to muxbee
 
-Thank you for your interest in contributing to muxchat!
+Thank you for your interest in contributing to muxbee!
 
 ## Development Setup
 
@@ -13,9 +13,9 @@ Thank you for your interest in contributing to muxchat!
 ### Building from Source
 
 ```bash
-git clone https://github.com/tobocop2/muxchat.git
-cd muxchat
-go build -o muxchat .
+git clone https://github.com/tobocop2/muxbee.git
+cd muxbee
+go build -o muxbee .
 ```
 
 ### Running Tests
@@ -27,7 +27,7 @@ go test ./...
 ### Project Structure
 
 ```
-muxchat/
+muxbee/
 ├── cmd/                    # CLI commands (Cobra)
 ├── internal/
 │   ├── config/            # Configuration management
@@ -60,7 +60,7 @@ muxchat/
 2. Create a feature branch from `main`
 3. Make your changes
 4. Run tests: `go test ./...`
-5. Build and verify: `go build -o muxchat . && ./muxchat --version`
+5. Build and verify: `go build -o muxbee . && ./muxbee --version`
 6. Submit a pull request
 
 **PR Guidelines:**

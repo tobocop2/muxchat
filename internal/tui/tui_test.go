@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/tobias/muxchat/internal/config"
-	"github.com/tobias/muxchat/internal/docker"
+	"github.com/tobias/muxbee/internal/config"
+	"github.com/tobias/muxbee/internal/docker"
 )
 
 // Test Dashboard Model
@@ -46,8 +46,8 @@ func TestDashboardModel_Update_ServicesUpdated(t *testing.T) {
 	m.loadingOp = "Starting"
 
 	services := []docker.ServiceStatus{
-		{Name: "muxchat-synapse-1", Running: true, Health: "healthy"},
-		{Name: "muxchat-postgres-1", Running: true},
+		{Name: "muxbee-synapse-1", Running: true, Health: "healthy"},
+		{Name: "muxbee-postgres-1", Running: true},
 	}
 
 	msg := servicesUpdatedMsg{services: services}
@@ -83,8 +83,8 @@ func TestDashboardModel_View_WithConfig(t *testing.T) {
 
 	view := m.View(cfg)
 
-	if !strings.Contains(view, "muxchat") {
-		t.Error("expected view to contain 'muxchat'")
+	if !strings.Contains(view, "muxbee") {
+		t.Error("expected view to contain 'muxbee'")
 	}
 	if !strings.Contains(view, "test.local") {
 		t.Error("expected view to contain server name")
@@ -117,8 +117,8 @@ func TestDashboardModel_View_Loading(t *testing.T) {
 func TestDashboardModel_View_Services(t *testing.T) {
 	m := NewDashboardModel()
 	m.services = []docker.ServiceStatus{
-		{Name: "muxchat-synapse-1", Running: true, Health: "healthy"},
-		{Name: "muxchat-postgres-1", Running: false},
+		{Name: "muxbee-synapse-1", Running: true, Health: "healthy"},
+		{Name: "muxbee-postgres-1", Running: false},
 	}
 
 	cfg := &config.Config{
@@ -477,12 +477,12 @@ func TestParseLine(t *testing.T) {
 		wantMessage string
 	}{
 		{
-			input:       "muxchat-synapse-1  | Server starting",
+			input:       "muxbee-synapse-1  | Server starting",
 			wantService: "synapse",
 			wantMessage: "Server starting",
 		},
 		{
-			input:       "muxchat-postgres-1 | Ready",
+			input:       "muxbee-postgres-1 | Ready",
 			wantService: "postgres",
 			wantMessage: "Ready",
 		},
@@ -804,8 +804,8 @@ func TestWizardModel_View_WelcomeContent(t *testing.T) {
 	m.step = WizardStepWelcome
 	view := m.View()
 
-	if !strings.Contains(view, "muxchat") {
-		t.Error("expected welcome view to contain 'muxchat'")
+	if !strings.Contains(view, "muxbee") {
+		t.Error("expected welcome view to contain 'muxbee'")
 	}
 }
 

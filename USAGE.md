@@ -2,13 +2,13 @@
 
 ## Quick Start
 
-The TUI handles everything interactively — just run `muxchat`. Or use CLI commands:
+The TUI handles everything interactively — just run `muxbee`. Or use CLI commands:
 
 ```bash
-muxchat init                      # Generate configs
-muxchat bridge enable whatsapp    # Add a bridge
-muxchat up                        # Start containers
-muxchat open                      # Open Element
+muxbee init                      # Generate configs
+muxbee bridge enable whatsapp    # Add a bridge
+muxbee up                        # Start containers
+muxbee open                      # Open Element
 ```
 
 Sign into Element with your admin credentials. Start a chat with any bridge bot (e.g., `@whatsappbot:localhost`) — the bot will tell you how to authenticate.
@@ -16,10 +16,10 @@ Sign into Element with your admin credentials. Start a chat with any bridge bot 
 <img src="assets/element.gif" alt="Element with bridge bots" width="1000">
 
 **Finding your admin credentials:**
-- Shown during `muxchat init` and `muxchat up`
-- **Missed it?** Run `muxchat config show --show-secrets` and look for the `admin` section with `username` and `password`
+- Shown during `muxbee init` and `muxbee up`
+- **Missed it?** Run `muxbee config show --show-secrets` and look for the `admin` section with `username` and `password`
 
-> **Note:** If you change your password in Element, the stored password becomes stale. muxchat doesn't sync password changes from Synapse.
+> **Note:** If you change your password in Element, the stored password becomes stale. muxbee doesn't sync password changes from Synapse.
 
 ## Available Bridges
 
@@ -78,14 +78,14 @@ Or use [mautrix-manager](https://github.com/mautrix/manager) for automated cooki
 
 **Private network** (VPN/Tailscale/Zerotier): Access from anywhere via your private network.
 ```bash
-muxchat init --server-name 192.168.1.50
+muxbee init --server-name 192.168.1.50
 # or with Tailscale:
-muxchat init --server-name your-machine.tailnet-name.ts.net
+muxbee init --server-name your-machine.tailnet-name.ts.net
 ```
 
 **Public HTTPS**: Expose to the internet with automatic SSL via [Caddy](https://caddyserver.com/).
 ```bash
-muxchat init --https --domain chat.example.com --email you@example.com
+muxbee init --https --domain chat.example.com --email you@example.com
 ```
 
 For public HTTPS, you need:
@@ -94,11 +94,11 @@ For public HTTPS, you need:
 
 See [Caddy's automatic HTTPS docs](https://caddyserver.com/docs/automatic-https) for details.
 
-> **Note:** Private network and Public HTTPS modes are not fully tested yet. Local mode is recommended for now. See [#2](https://github.com/tobocop2/muxchat/issues/2) for status.
+> **Note:** Private network and Public HTTPS modes are not fully tested yet. Local mode is recommended for now. See [#2](https://github.com/tobocop2/muxbee/issues/2) for status.
 
 ## How It Works
 
-muxchat runs a personal [Matrix](https://matrix.org) server (Synapse) with messaging bridges that connect to your accounts. You access everything through Element, a web-based Matrix client.
+muxbee runs a personal [Matrix](https://matrix.org) server (Synapse) with messaging bridges that connect to your accounts. You access everything through Element, a web-based Matrix client.
 
 ```
 ┌─────────────────────────────────────────────────┐
@@ -119,14 +119,14 @@ muxchat runs a personal [Matrix](https://matrix.org) server (Synapse) with messa
     WhatsApp        Discord        Signal
 ```
 
-All services run in Docker containers. muxchat manages the Docker Compose configuration automatically.
+All services run in Docker containers. muxbee manages the Docker Compose configuration automatically.
 
 ## Data Storage
 
 Configuration and data follow XDG conventions:
 
-- Config: `~/.config/muxchat/`
-- Data: `~/.local/share/muxchat/`
+- Config: `~/.config/muxbee/`
+- Data: `~/.local/share/muxbee/`
 
 Override with `XDG_CONFIG_HOME` and `XDG_DATA_HOME`.
 
@@ -135,28 +135,28 @@ Override with `XDG_CONFIG_HOME` and `XDG_DATA_HOME`.
 Bridges use `:latest` Docker images. Pull updates when things break or you want new versions:
 
 ```bash
-muxchat update    # CLI
+muxbee update    # CLI
 # or press 'u' in TUI dashboard
 ```
 
-This pulls latest images and restarts all services. Run `muxchat status` to see current versions.
+This pulls latest images and restarts all services. Run `muxbee status` to see current versions.
 
 ## Troubleshooting
 
 **Services won't start:**
 ```bash
-muxchat health
-muxchat logs
+muxbee health
+muxbee logs
 ```
 
 **Bridge not connecting:**
 ```bash
-muxchat logs mautrix-whatsapp
+muxbee logs mautrix-whatsapp
 ```
 
 **Start fresh:**
 ```bash
-muxchat down && muxchat nuke --yes && muxchat init
+muxbee down && muxbee nuke --yes && muxbee init
 ```
 
 **WhatsApp contacts not appearing:**
@@ -167,65 +167,65 @@ If a bridge database was corrupted or reset, existing chat rooms with the bot be
 
 ## CLI Reference
 
-Run `muxchat --help` for all commands, or `muxchat <command> --help` for details.
+Run `muxbee --help` for all commands, or `muxbee <command> --help` for details.
 
 ### Core Commands
 
 ```
-muxchat                   Launch the interactive TUI
-muxchat init              Initialize configuration
-muxchat up                Start all services
-muxchat down              Stop all services
-muxchat status            Show service status with versions
-muxchat update            Pull latest images and restart
-muxchat open              Open Element Web in browser
+muxbee                   Launch the interactive TUI
+muxbee init              Initialize configuration
+muxbee up                Start all services
+muxbee down              Stop all services
+muxbee status            Show service status with versions
+muxbee update            Pull latest images and restart
+muxbee open              Open Element Web in browser
 ```
 
 ### Bridge Management
 
 ```
-muxchat bridge list              List available bridges
-muxchat bridge enable <name>     Enable a bridge
-muxchat bridge disable <name>    Disable a bridge
-muxchat bridge login <name>      Show login instructions
+muxbee bridge list              List available bridges
+muxbee bridge enable <name>     Enable a bridge
+muxbee bridge disable <name>    Disable a bridge
+muxbee bridge login <name>      Show login instructions
 ```
 
 ### Logs & Monitoring
 
 ```
-muxchat logs                     View all logs
-muxchat logs <service>           View logs for specific service
-muxchat logs -f                  Follow logs (live stream)
-muxchat logs -n 50               Show last 50 lines
-muxchat health                   Check service health
+muxbee logs                     View all logs
+muxbee logs <service>           View logs for specific service
+muxbee logs -f                  Follow logs (live stream)
+muxbee logs -n 50               Show last 50 lines
+muxbee health                   Check service health
 ```
 
 ### Backup & Recovery
 
 ```
-muxchat backup                   Create backup archive
-muxchat backup -o backup.tar.gz  Specify output file
-muxchat restore backup.tar.gz    Restore from backup
-muxchat nuke                     Remove all data (with confirmation)
-muxchat nuke -y                  Remove all data (skip confirmation)
+muxbee backup                   Create backup archive
+muxbee backup -o backup.tar.gz  Specify output file
+muxbee restore backup.tar.gz    Restore from backup
+muxbee nuke                     Remove all data (with confirmation)
+muxbee nuke -y                  Remove all data (skip confirmation)
 ```
 
 ### Configuration
 
 ```
-muxchat config show              Show current configuration
-muxchat init --server-name x     Set Matrix server name
-muxchat init --https             Enable HTTPS mode
-muxchat init --domain x.com      Set domain for HTTPS
-muxchat init --email you@x.com   Set email for Let's Encrypt
-muxchat init --no-element        Don't run Element Web
-muxchat init --force             Overwrite existing config
+muxbee config show              Show current configuration
+muxbee init --server-name x     Set Matrix server name
+muxbee init --https             Enable HTTPS mode
+muxbee init --domain x.com      Set domain for HTTPS
+muxbee init --email you@x.com   Set email for Let's Encrypt
+muxbee init --no-element        Don't run Element Web
+muxbee init --force             Overwrite existing config
 ```
 
 ### Other
 
 ```
-muxchat setup-bots               Create DM rooms with bridge bots
-muxchat tui                      Launch TUI (same as no args)
-muxchat --version                Show version
+muxbee setup-bots               Create DM rooms with bridge bots
+muxbee tui                      Launch TUI (same as no args)
+muxbee --version                Show version
 ```

@@ -14,7 +14,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tobias/muxchat/internal/config"
+	"github.com/tobias/muxbee/internal/config"
 )
 
 //go:embed docker-compose.yml
@@ -491,7 +491,7 @@ func (c *Compose) WaitForBridges(bridges []string, timeout int) error {
 
 // ParseServiceName extracts the service name from a container name
 func ParseServiceName(containerName string) string {
-	const prefix = "muxchat-"
+	const prefix = "muxbee-"
 	if strings.HasPrefix(containerName, prefix) {
 		remainder := strings.TrimPrefix(containerName, prefix)
 		if idx := strings.LastIndex(remainder, "-"); idx > 0 {

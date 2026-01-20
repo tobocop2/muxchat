@@ -13,23 +13,23 @@ import (
 func TestConfigDir(t *testing.T) {
 	// Test with XDG_CONFIG_HOME set
 	t.Setenv("XDG_CONFIG_HOME", "/tmp/test-config")
-	assert.Equal(t, "/tmp/test-config/muxchat", ConfigDir())
+	assert.Equal(t, "/tmp/test-config/muxbee", ConfigDir())
 
 	// Test without XDG_CONFIG_HOME
 	t.Setenv("XDG_CONFIG_HOME", "")
 	home, _ := os.UserHomeDir()
-	assert.Equal(t, filepath.Join(home, ".config", "muxchat"), ConfigDir())
+	assert.Equal(t, filepath.Join(home, ".config", "muxbee"), ConfigDir())
 }
 
 func TestDataDir(t *testing.T) {
 	// Test with XDG_DATA_HOME set
 	t.Setenv("XDG_DATA_HOME", "/tmp/test-data")
-	assert.Equal(t, "/tmp/test-data/muxchat", DataDir())
+	assert.Equal(t, "/tmp/test-data/muxbee", DataDir())
 
 	// Test without XDG_DATA_HOME
 	t.Setenv("XDG_DATA_HOME", "")
 	home, _ := os.UserHomeDir()
-	assert.Equal(t, filepath.Join(home, ".local", "share", "muxchat"), DataDir())
+	assert.Equal(t, filepath.Join(home, ".local", "share", "muxbee"), DataDir())
 }
 
 func TestGeneratePassword(t *testing.T) {
@@ -301,10 +301,10 @@ func TestLoadInvalidYAML(t *testing.T) {
 	t.Setenv("XDG_CONFIG_HOME", tmpDir)
 
 	// Create directory and write invalid YAML
-	err := os.MkdirAll(filepath.Join(tmpDir, "muxchat"), 0755)
+	err := os.MkdirAll(filepath.Join(tmpDir, "muxbee"), 0755)
 	require.NoError(t, err)
 
-	err = os.WriteFile(filepath.Join(tmpDir, "muxchat", "settings.yaml"), []byte("invalid: [yaml: content"), 0600)
+	err = os.WriteFile(filepath.Join(tmpDir, "muxbee", "settings.yaml"), []byte("invalid: [yaml: content"), 0600)
 	require.NoError(t, err)
 
 	_, err = Load()

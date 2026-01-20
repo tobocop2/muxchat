@@ -10,13 +10,13 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/tobias/muxchat/internal/config"
+	"github.com/tobias/muxbee/internal/config"
 )
 
 var backupCmd = &cobra.Command{
 	Use:   "backup",
-	Short: "Backup muxchat data and configuration",
-	Long: `Create a backup of all muxchat data and configuration.
+	Short: "Backup muxbee data and configuration",
+	Long: `Create a backup of all muxbee data and configuration.
 
 The backup includes:
   - Configuration files (synapse, element, bridges)
@@ -29,17 +29,17 @@ var backupOutput string
 
 func init() {
 	rootCmd.AddCommand(backupCmd)
-	backupCmd.Flags().StringVarP(&backupOutput, "output", "o", "", "Output file path (default: muxchat-backup-TIMESTAMP.tar.gz)")
+	backupCmd.Flags().StringVarP(&backupOutput, "output", "o", "", "Output file path (default: muxbee-backup-TIMESTAMP.tar.gz)")
 }
 
 func runBackup(cmd *cobra.Command, args []string) error {
 	if !config.Exists() {
-		return fmt.Errorf("no configuration found\nRun 'muxchat init' first")
+		return fmt.Errorf("no configuration found\nRun 'muxbee init' first")
 	}
 
 	if backupOutput == "" {
 		timestamp := time.Now().Format("20060102-150405")
-		backupOutput = fmt.Sprintf("muxchat-backup-%s.tar.gz", timestamp)
+		backupOutput = fmt.Sprintf("muxbee-backup-%s.tar.gz", timestamp)
 	}
 
 	configDir := config.ConfigDir()

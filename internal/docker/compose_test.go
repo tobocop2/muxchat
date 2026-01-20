@@ -7,12 +7,12 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tobias/muxchat/internal/config"
+	"github.com/tobias/muxbee/internal/config"
 )
 
 func TestDockerComposeYAMLEmbedded(t *testing.T) {
 	assert.NotEmpty(t, DockerComposeYAML)
-	assert.Contains(t, string(DockerComposeYAML), "name: muxchat")
+	assert.Contains(t, string(DockerComposeYAML), "name: muxbee")
 	assert.Contains(t, string(DockerComposeYAML), "postgres:")
 	assert.Contains(t, string(DockerComposeYAML), "synapse:")
 	assert.Contains(t, string(DockerComposeYAML), "element:")
@@ -32,8 +32,8 @@ func TestNew(t *testing.T) {
 
 	compose := New(cfg)
 	assert.NotNil(t, compose)
-	assert.Contains(t, compose.configDir, "muxchat")
-	assert.Contains(t, compose.dataDir, "muxchat")
+	assert.Contains(t, compose.configDir, "muxbee")
+	assert.Contains(t, compose.dataDir, "muxbee")
 
 	// Check environment variables
 	hasConfigDir := false
@@ -144,10 +144,10 @@ func TestParseServiceName(t *testing.T) {
 		containerName string
 		expected      string
 	}{
-		{"muxchat-postgres-1", "postgres"},
-		{"muxchat-synapse-1", "synapse"},
-		{"muxchat-mautrix-whatsapp-1", "mautrix-whatsapp"},
-		{"muxchat-element-1", "element"},
+		{"muxbee-postgres-1", "postgres"},
+		{"muxbee-synapse-1", "synapse"},
+		{"muxbee-mautrix-whatsapp-1", "mautrix-whatsapp"},
+		{"muxbee-element-1", "element"},
 		{"simple", "simple"},
 	}
 
@@ -171,7 +171,7 @@ func TestComposePath(t *testing.T) {
 	compose := New(cfg)
 	path := compose.composePath()
 	assert.Contains(t, path, "docker-compose.yml")
-	assert.Contains(t, path, "muxchat")
+	assert.Contains(t, path, "muxbee")
 }
 
 func TestBuildCommand(t *testing.T) {

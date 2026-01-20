@@ -8,7 +8,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/tobias/muxchat/internal/docker"
+	"github.com/tobias/muxbee/internal/docker"
 )
 
 // LogsModel handles the logs screen
@@ -160,7 +160,7 @@ func parseLine(line string) logEntry {
 	parts := strings.SplitN(line, "|", 2)
 	if len(parts) == 2 {
 		service := strings.TrimSpace(parts[0])
-		// Parse service name (e.g., "muxchat-synapse-1" -> "synapse")
+		// Parse service name (e.g., "muxbee-synapse-1" -> "synapse")
 		service = docker.ParseServiceName(service)
 		message := strings.TrimSpace(parts[1])
 		return logEntry{

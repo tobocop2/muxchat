@@ -8,10 +8,10 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/tobias/muxchat/internal/bridges"
-	"github.com/tobias/muxchat/internal/config"
-	"github.com/tobias/muxchat/internal/docker"
-	"github.com/tobias/muxchat/internal/generator"
+	"github.com/tobias/muxbee/internal/bridges"
+	"github.com/tobias/muxbee/internal/config"
+	"github.com/tobias/muxbee/internal/docker"
+	"github.com/tobias/muxbee/internal/generator"
 )
 
 var bridgeCmd = &cobra.Command{
@@ -32,7 +32,7 @@ var bridgeEnableCmd = &cobra.Command{
 	Short: "Enable a messaging bridge",
 	Long: `Enable a messaging bridge.
 
-Run 'muxchat bridge list' to see available bridges.`,
+Run 'muxbee bridge list' to see available bridges.`,
 	Args: cobra.ExactArgs(1),
 	RunE: runBridgeEnable,
 }
@@ -96,12 +96,12 @@ func runBridgeEnable(cmd *cobra.Command, args []string) error {
 
 	bridge := bridges.Get(bridgeName)
 	if bridge == nil {
-		return fmt.Errorf("unknown bridge: %s\nRun 'muxchat bridge list' to see available bridges", bridgeName)
+		return fmt.Errorf("unknown bridge: %s\nRun 'muxbee bridge list' to see available bridges", bridgeName)
 	}
 
 	cfg, err := config.Load()
 	if err != nil {
-		return fmt.Errorf("failed to load config: %w\nRun 'muxchat init' first", err)
+		return fmt.Errorf("failed to load config: %w\nRun 'muxbee init' first", err)
 	}
 
 	if cfg.IsBridgeEnabled(bridgeName) {
@@ -149,10 +149,10 @@ func runBridgeEnable(cmd *cobra.Command, args []string) error {
 		fmt.Println("Done!")
 	} else {
 		fmt.Println()
-		fmt.Println("Run 'muxchat up' to start services.")
+		fmt.Println("Run 'muxbee up' to start services.")
 	}
 
-	fmt.Printf("Run 'muxchat bridge login %s' for login instructions.\n", bridgeName)
+	fmt.Printf("Run 'muxbee bridge login %s' for login instructions.\n", bridgeName)
 
 	return nil
 }
@@ -223,7 +223,7 @@ func runBridgeDisable(cmd *cobra.Command, args []string) error {
 
 	cfg, err := config.Load()
 	if err != nil {
-		return fmt.Errorf("failed to load config: %w\nRun 'muxchat init' first", err)
+		return fmt.Errorf("failed to load config: %w\nRun 'muxbee init' first", err)
 	}
 
 	if !cfg.IsBridgeEnabled(bridgeName) {
@@ -243,7 +243,7 @@ func runBridgeDisable(cmd *cobra.Command, args []string) error {
 	}
 
 	fmt.Printf("Bridge '%s' disabled.\n", bridgeName)
-	fmt.Println("Run 'muxchat up' to apply changes.")
+	fmt.Println("Run 'muxbee up' to apply changes.")
 
 	return nil
 }
@@ -258,11 +258,11 @@ func runBridgeLogin(cmd *cobra.Command, args []string) error {
 
 	cfg, err := config.Load()
 	if err != nil {
-		return fmt.Errorf("failed to load config: %w\nRun 'muxchat init' first", err)
+		return fmt.Errorf("failed to load config: %w\nRun 'muxbee init' first", err)
 	}
 
 	if !cfg.IsBridgeEnabled(bridgeName) {
-		return fmt.Errorf("bridge '%s' is not enabled\nRun 'muxchat bridge enable %s' first", bridgeName, bridgeName)
+		return fmt.Errorf("bridge '%s' is not enabled\nRun 'muxbee bridge enable %s' first", bridgeName, bridgeName)
 	}
 
 	fmt.Printf("Login instructions for %s:\n", bridge.Description)

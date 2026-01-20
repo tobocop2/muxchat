@@ -1,4 +1,4 @@
-name: muxchat
+name: muxbee
 
 services:
   postgres:
@@ -17,7 +17,7 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - muxchat
+      - muxbee
 
   synapse:
     image: matrixdotorg/synapse:latest
@@ -40,7 +40,7 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - muxchat
+      - muxbee
 
   element:
     image: vectorim/element-web:latest
@@ -54,7 +54,7 @@ services:
     ports:
       - "${ELEMENT_PORT:-8080}:80"
     networks:
-      - muxchat
+      - muxbee
 
   caddy:
     image: caddy:latest
@@ -71,7 +71,7 @@ services:
       - ${DATA_DIR}/caddy/data:/data
       - ${DATA_DIR}/caddy/config:/config
     networks:
-      - muxchat
+      - muxbee
 
   mautrix-whatsapp:
     image: dock.mau.dev/mautrix/whatsapp:latest
@@ -83,7 +83,7 @@ services:
     volumes:
       - ${DATA_DIR}/bridges/whatsapp:/data
     networks:
-      - muxchat
+      - muxbee
 
   mautrix-gmessages:
     image: dock.mau.dev/mautrix/gmessages:latest
@@ -95,7 +95,7 @@ services:
     volumes:
       - ${DATA_DIR}/bridges/gmessages:/data
     networks:
-      - muxchat
+      - muxbee
 
   mautrix-signal:
     image: dock.mau.dev/mautrix/signal:latest
@@ -107,7 +107,7 @@ services:
     volumes:
       - ${DATA_DIR}/bridges/signal:/data
     networks:
-      - muxchat
+      - muxbee
 
   mautrix-discord:
     image: dock.mau.dev/mautrix/discord:latest
@@ -119,7 +119,7 @@ services:
     volumes:
       - ${DATA_DIR}/bridges/discord:/data
     networks:
-      - muxchat
+      - muxbee
 
   mautrix-slack:
     image: dock.mau.dev/mautrix/slack:latest
@@ -131,7 +131,7 @@ services:
     volumes:
       - ${DATA_DIR}/bridges/slack:/data
     networks:
-      - muxchat
+      - muxbee
 
   mautrix-googlechat:
     image: dock.mau.dev/mautrix/googlechat:latest
@@ -143,7 +143,7 @@ services:
     volumes:
       - ${DATA_DIR}/bridges/googlechat:/data
     networks:
-      - muxchat
+      - muxbee
 
   mautrix-gvoice:
     image: dock.mau.dev/mautrix/gvoice:latest
@@ -155,7 +155,7 @@ services:
     volumes:
       - ${DATA_DIR}/bridges/gvoice:/data
     networks:
-      - muxchat
+      - muxbee
 
   mautrix-linkedin:
     image: dock.mau.dev/mautrix/linkedin:latest
@@ -167,7 +167,7 @@ services:
     volumes:
       - ${DATA_DIR}/bridges/linkedin:/data
     networks:
-      - muxchat
+      - muxbee
 
   mautrix-meta:
     image: dock.mau.dev/mautrix/meta:latest
@@ -179,7 +179,7 @@ services:
     volumes:
       - ${DATA_DIR}/bridges/meta:/data
     networks:
-      - muxchat
+      - muxbee
 
   mautrix-twitter:
     image: dock.mau.dev/mautrix/twitter:latest
@@ -191,7 +191,7 @@ services:
     volumes:
       - ${DATA_DIR}/bridges/twitter:/data
     networks:
-      - muxchat
+      - muxbee
 
   mautrix-bluesky:
     image: dock.mau.dev/mautrix/bluesky:latest
@@ -203,7 +203,7 @@ services:
     volumes:
       - ${DATA_DIR}/bridges/bluesky:/data
     networks:
-      - muxchat
+      - muxbee
 
   mautrix-irc:
     image: dock.mau.dev/mautrix/irc:latest
@@ -215,7 +215,7 @@ services:
     volumes:
       - ${DATA_DIR}/bridges/irc:/data
     networks:
-      - muxchat
+      - muxbee
 
   mautrix-telegram:
     image: dock.mau.dev/mautrix/telegram:latest
@@ -227,8 +227,8 @@ services:
     volumes:
       - ${DATA_DIR}/bridges/telegram:/data
     networks:
-      - muxchat
+      - muxbee
 
 networks:
-  muxchat:
+  muxbee:
     driver: bridge

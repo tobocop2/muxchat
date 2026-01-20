@@ -18,7 +18,7 @@ jobs:
           go-version: '1.22'
 
       - name: Build
-        run: go build -o muxchat .
+        run: go build -o muxbee .
 
       - name: Test with coverage
         run: go test -race -coverprofile=coverage.out -covermode=atomic ./...

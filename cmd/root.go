@@ -5,16 +5,16 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/tobias/muxchat/internal/tui"
+	"github.com/tobias/muxbee/internal/tui"
 )
 
 // Version is set at build time via ldflags
 var Version = "dev"
 
 var rootCmd = &cobra.Command{
-	Use:   "muxchat",
+	Use:   "muxbee",
 	Short: "Self-hosted Matrix server with messaging bridges",
-	Long: `muxchat is a self-hosted Matrix server with messaging bridges.
+	Long: `muxbee is a self-hosted Matrix server with messaging bridges.
 
 Run without arguments to launch the TUI, or use subcommands for CLI access.`,
 	Version: Version,
@@ -32,5 +32,5 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.SetVersionTemplate("muxchat version {{.Version}}\n")
+	rootCmd.SetVersionTemplate("muxbee version {{.Version}}\n")
 }

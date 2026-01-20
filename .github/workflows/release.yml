@@ -24,22 +24,22 @@ jobs:
       - name: Build binaries
         run: |
           VERSION=${GITHUB_REF#refs/tags/}
-          LDFLAGS="-s -w -X github.com/tobias/muxchat/cmd.Version=$VERSION"
+          LDFLAGS="-s -w -X github.com/tobias/muxbee/cmd.Version=$VERSION"
 
           # Linux amd64
-          GOOS=linux GOARCH=amd64 go build -ldflags="$LDFLAGS" -o dist/muxchat-linux-amd64 .
+          GOOS=linux GOARCH=amd64 go build -ldflags="$LDFLAGS" -o dist/muxbee-linux-amd64 .
 
           # Linux arm64
-          GOOS=linux GOARCH=arm64 go build -ldflags="$LDFLAGS" -o dist/muxchat-linux-arm64 .
+          GOOS=linux GOARCH=arm64 go build -ldflags="$LDFLAGS" -o dist/muxbee-linux-arm64 .
 
           # macOS amd64
-          GOOS=darwin GOARCH=amd64 go build -ldflags="$LDFLAGS" -o dist/muxchat-darwin-amd64 .
+          GOOS=darwin GOARCH=amd64 go build -ldflags="$LDFLAGS" -o dist/muxbee-darwin-amd64 .
 
           # macOS arm64 (Apple Silicon)
-          GOOS=darwin GOARCH=arm64 go build -ldflags="$LDFLAGS" -o dist/muxchat-darwin-arm64 .
+          GOOS=darwin GOARCH=arm64 go build -ldflags="$LDFLAGS" -o dist/muxbee-darwin-arm64 .
 
           # Windows amd64
-          GOOS=windows GOARCH=amd64 go build -ldflags="$LDFLAGS" -o dist/muxchat-windows-amd64.exe .
+          GOOS=windows GOARCH=amd64 go build -ldflags="$LDFLAGS" -o dist/muxbee-windows-amd64.exe .
 
       - name: Create checksums
         run: |
@@ -50,10 +50,10 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            dist/muxchat-linux-amd64
-            dist/muxchat-linux-arm64
-            dist/muxchat-darwin-amd64
-            dist/muxchat-darwin-arm64
-            dist/muxchat-windows-amd64.exe
+            dist/muxbee-linux-amd64
+            dist/muxbee-linux-arm64
+            dist/muxbee-darwin-amd64
+            dist/muxbee-darwin-arm64
+            dist/muxbee-windows-amd64.exe
             dist/checksums.txt
           generate_release_notes: true

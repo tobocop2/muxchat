@@ -7,10 +7,10 @@ import (
 
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/tobias/muxchat/internal/bridges"
-	"github.com/tobias/muxchat/internal/config"
-	"github.com/tobias/muxchat/internal/docker"
-	"github.com/tobias/muxchat/internal/generator"
+	"github.com/tobias/muxbee/internal/bridges"
+	"github.com/tobias/muxbee/internal/config"
+	"github.com/tobias/muxbee/internal/docker"
+	"github.com/tobias/muxbee/internal/generator"
 )
 
 // BridgesModel handles the bridges screen
@@ -466,7 +466,7 @@ func (m *BridgesModel) toggleBridgeBackground(cfg *config.Config, bridgeName str
 		time.Sleep(5 * time.Second)
 		serviceName := "mautrix-" + bridgeName
 		if !d.IsServiceRunning(serviceName) {
-			m.resultChan <- bridgeToggledMsg{err: fmt.Errorf("%s failed to start - check logs with 'muxchat logs %s'", bridgeName, serviceName)}
+			m.resultChan <- bridgeToggledMsg{err: fmt.Errorf("%s failed to start - check logs with 'muxbee logs %s'", bridgeName, serviceName)}
 			return
 		}
 	} else {

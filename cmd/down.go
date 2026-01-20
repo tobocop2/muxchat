@@ -4,14 +4,14 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/tobias/muxchat/internal/config"
-	"github.com/tobias/muxchat/internal/docker"
+	"github.com/tobias/muxbee/internal/config"
+	"github.com/tobias/muxbee/internal/docker"
 )
 
 var downCmd = &cobra.Command{
 	Use:   "down",
-	Short: "Stop muxchat services",
-	Long:  `Stop all running muxchat services.`,
+	Short: "Stop muxbee services",
+	Long:  `Stop all running muxbee services.`,
 	RunE:  runDown,
 }
 
@@ -22,7 +22,7 @@ func init() {
 func runDown(cmd *cobra.Command, args []string) error {
 	cfg, err := config.Load()
 	if err != nil {
-		return fmt.Errorf("failed to load config: %w\nRun 'muxchat init' first", err)
+		return fmt.Errorf("failed to load config: %w\nRun 'muxbee init' first", err)
 	}
 
 	compose := docker.New(cfg)

@@ -12,8 +12,8 @@ func TestRootCommand(t *testing.T) {
 	if rootCmd == nil {
 		t.Fatal("rootCmd is nil")
 	}
-	if rootCmd.Use != "muxchat" {
-		t.Errorf("expected Use to be 'muxchat', got '%s'", rootCmd.Use)
+	if rootCmd.Use != "muxbee" {
+		t.Errorf("expected Use to be 'muxbee', got '%s'", rootCmd.Use)
 	}
 	if rootCmd.Short == "" {
 		t.Error("expected Short description to be set")
@@ -104,8 +104,8 @@ func TestRootHelpOutput(t *testing.T) {
 	rootCmd.Execute()
 
 	output := buf.String()
-	if !strings.Contains(output, "muxchat") {
-		t.Error("expected help output to contain 'muxchat'")
+	if !strings.Contains(output, "muxbee") {
+		t.Error("expected help output to contain 'muxbee'")
 	}
 	if !strings.Contains(output, "Matrix") {
 		t.Error("expected help output to mention Matrix")

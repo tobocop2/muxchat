@@ -1,14 +1,14 @@
-# muxchat Architecture
+# muxbee Architecture
 
-This document describes muxchat's architecture, design decisions, and the sane defaults it provides out of the box.
+This document describes muxbee's architecture, design decisions, and the sane defaults it provides out of the box.
 
 ## Overview
 
-muxchat is a thin orchestration layer around proven open-source components:
+muxbee is a thin orchestration layer around proven open-source components:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                         muxchat CLI                              │
+│                         muxbee CLI                              │
 │              (Go binary with embedded templates)                 │
 └─────────────────────────────────────────────────────────────────┘
                               │
@@ -59,7 +59,7 @@ muxchat is a thin orchestration layer around proven open-source components:
 ## Design Decisions
 
 ### Single Binary Distribution
-muxchat is distributed as a single Go binary with embedded assets:
+muxbee is distributed as a single Go binary with embedded assets:
 - Docker Compose configuration
 - Config templates (Synapse, Element, bridges)
 - Bridge registry (ports, login instructions, categories)
@@ -76,7 +76,7 @@ We shell out to `docker compose` rather than using the Docker SDK because:
 ### XDG Directory Layout
 Configuration and data follow XDG Base Directory conventions:
 ```
-~/.config/muxchat/          # Configuration (settings, generated configs)
+~/.config/muxbee/          # Configuration (settings, generated configs)
 ├── settings.yaml           # User settings and credentials
 ├── docker-compose.yml      # Generated compose file
 ├── synapse/
@@ -87,7 +87,7 @@ Configuration and data follow XDG Base Directory conventions:
     └── <bridge>/
         └── registration.yaml
 
-~/.local/share/muxchat/     # Persistent data (databases, media)
+~/.local/share/muxbee/     # Persistent data (databases, media)
 ├── synapse/                # Synapse data, media, signing keys
 ├── postgres/               # PostgreSQL data
 └── bridges/
@@ -114,7 +114,7 @@ Each bridge's "note" field explains any special requirements. Bridges without no
 
 ## Sane Defaults
 
-muxchat configures services with production-ready defaults so things "just work."
+muxbee configures services with production-ready defaults so things "just work."
 
 ### Auto-Accept Room Invites
 **Problem**: When a bridge syncs, it creates rooms and invites the user. Without auto-accept, users must manually accept hundreds of invites.
@@ -160,7 +160,7 @@ permissions:
 ### Double Puppeting
 **Problem**: Without double puppeting, messages you send from your phone appear in Element as coming from a "ghost user" (e.g., `@whatsapp_123456:localhost`) rather than your real Matrix account.
 
-**Solution**: muxchat configures appservice-based double puppeting. A dedicated `doublepuppet` appservice is registered with Synapse, and bridges are configured with its token:
+**Solution**: muxbee configures appservice-based double puppeting. A dedicated `doublepuppet` appservice is registered with Synapse, and bridges are configured with its token:
 ```yaml
 double_puppet:
   secrets:
@@ -215,7 +215,7 @@ Tokens are persisted in `settings.yaml` and reused across restarts.
 
 ## Network Architecture
 
-All services communicate on a private Docker network (`muxchat`):
+All services communicate on a private Docker network (`muxbee`):
 
 ```
 External Access:
@@ -233,9 +233,9 @@ Bridges connect to Synapse via the internal Docker network. They're not exposed 
 
 ## File Generation Flow
 
-When `muxchat up` runs:
+When `muxbee up` runs:
 
-1. **Load settings** from `~/.config/muxchat/settings.yaml`
+1. **Load settings** from `~/.config/muxbee/settings.yaml`
 2. **Generate configs** from embedded templates:
    - Synapse homeserver.yaml (with DB creds, bridge registrations)
    - Element config.json (with homeserver URL)
@@ -258,7 +258,7 @@ The registration contains:
 - HS token (Synapse→bridge auth)
 - User/alias namespace regex (which Matrix IDs the bridge controls)
 
-Both files must have matching tokens. muxchat generates tokens once and persists them in settings.yaml.
+Both files must have matching tokens. muxbee generates tokens once and persists them in settings.yaml.
 
 ## Security Considerations
 
@@ -277,7 +277,7 @@ Both files must have matching tokens. muxchat generates tokens once and persists
 - Each bridge has its own isolated data directory
 - Bridge tokens are unique per-bridge
 
-## Extending muxchat
+## Extending muxbee
 
 ### Adding a New Bridge
 
@@ -287,10 +287,10 @@ Quick version:
 1. Add entry to `internal/bridges/bridges.yaml`
 2. Create template in `internal/generator/templates/bridges/<name>.yaml.tmpl`
 3. Add service to `internal/docker/docker-compose.yml`
-4. Rebuild: `go build -o muxchat .`
+4. Rebuild: `go build -o muxbee .`
 
 ### Custom Synapse Configuration
-Edit `internal/generator/templates/synapse/homeserver.yaml.tmpl` and rebuild. Or for one-off changes, edit the generated file in `~/.config/muxchat/synapse/` (will be overwritten on next `muxchat up`).
+Edit `internal/generator/templates/synapse/homeserver.yaml.tmpl` and rebuild. Or for one-off changes, edit the generated file in `~/.config/muxbee/synapse/` (will be overwritten on next `muxbee up`).
 
 ### Using External Database
 Modify `internal/generator/templates/synapse/homeserver.yaml.tmpl` to point to your PostgreSQL instance and remove the postgres service from `internal/docker/docker-compose.yml`.

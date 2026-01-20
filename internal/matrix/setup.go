@@ -3,8 +3,8 @@ package matrix
 import (
 	"fmt"
 
-	"github.com/tobias/muxchat/internal/bridges"
-	"github.com/tobias/muxchat/internal/config"
+	"github.com/tobias/muxbee/internal/bridges"
+	"github.com/tobias/muxbee/internal/config"
 )
 
 // BotWelcomeMessages contains welcome messages for each bridge bot
@@ -37,7 +37,7 @@ Commands:
 	"telegram": `👋 Welcome to the Telegram bridge!
 
 This bridge requires API credentials from https://my.telegram.org
-(You provided these when enabling the bridge via muxchat)
+(You provided these when enabling the bridge via muxbee)
 
 To connect your Telegram account:
 1. Send: login
@@ -106,7 +106,7 @@ Commands:
 • help - Show all commands
 
 📖 Auth docs: https://docs.mau.fi/bridges/python/googlechat/authentication.html
-📖 Helper scripts: https://github.com/tobocop2/muxchat#helper-scripts`,
+📖 Helper scripts: https://github.com/tobocop2/muxbee#helper-scripts`,
 
 	"discord": `👋 Welcome to the Discord bridge!
 
@@ -178,7 +178,7 @@ Commands:
 • help - Show all commands
 
 📖 Auth docs: https://docs.mau.fi/bridges/go/slack/authentication.html
-📖 Helper scripts: https://github.com/tobocop2/muxchat#helper-scripts`,
+📖 Helper scripts: https://github.com/tobocop2/muxbee#helper-scripts`,
 
 	"gvoice": `👋 Welcome to the Google Voice bridge!
 
@@ -197,7 +197,7 @@ Commands:
 • help - Show all commands
 
 📖 Auth docs: https://docs.mau.fi/bridges/go/gvoice/authentication.html
-📖 Helper scripts: https://github.com/tobocop2/muxchat#helper-scripts`,
+📖 Helper scripts: https://github.com/tobocop2/muxbee#helper-scripts`,
 
 	"linkedin": `👋 Welcome to the LinkedIn bridge!
 

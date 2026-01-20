@@ -1,10 +1,10 @@
 .PHONY: build test clean install
 
 VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo "dev")
-LDFLAGS = -ldflags "-X github.com/tobias/muxchat/cmd.Version=$(VERSION)"
+LDFLAGS = -ldflags "-X github.com/tobias/muxbee/cmd.Version=$(VERSION)"
 
 build:
-	go build $(LDFLAGS) -o muxchat .
+	go build $(LDFLAGS) -o muxbee .
 
 test:
 	go test -race -coverprofile=coverage.out -covermode=atomic ./...
@@ -18,7 +18,7 @@ test:
 	@echo "Run 'go tool cover -html=coverage.out' for detailed report"
 
 clean:
-	rm -f muxchat
+	rm -f muxbee
 
 install:
 	go install $(LDFLAGS) .

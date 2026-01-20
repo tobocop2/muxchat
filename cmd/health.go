@@ -6,14 +6,14 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/tobias/muxchat/internal/config"
-	"github.com/tobias/muxchat/internal/docker"
+	"github.com/tobias/muxbee/internal/config"
+	"github.com/tobias/muxbee/internal/docker"
 )
 
 var healthCmd = &cobra.Command{
 	Use:   "health",
-	Short: "Check health of muxchat services",
-	Long: `Perform health checks on all muxchat services.
+	Short: "Check health of muxbee services",
+	Long: `Perform health checks on all muxbee services.
 
 This checks:
   - Docker availability
@@ -105,7 +105,7 @@ func runHealth(cmd *cobra.Command, args []string) error {
 	if allHealthy {
 		fmt.Println("All systems operational.")
 	} else {
-		fmt.Println("Some checks failed. Run 'muxchat status' for details.")
+		fmt.Println("Some checks failed. Run 'muxbee status' for details.")
 	}
 
 	return nil
