@@ -1,5 +1,5 @@
 # Binary
-muxchat
+muxbee
 
 # Go build artifacts
 *.exe
@@ -11,12 +11,15 @@ muxchat
 # Test artifacts
 *.test
 *.out
+coverage.html
+coverage.txt
 
 # IDE
 .idea/
 .vscode/
 *.swp
 *.swo
+*~
 
 # OS
 .DS_Store
@@ -24,7 +27,17 @@ Thumbs.db
 
 # Backups
 *.tar.gz
-muxchat-backup-*
+muxbee-backup-*
 
 # Claude Code
 .claude/
+
+# Vendor (if not committed)
+# vendor/
+
+# Debug
+__debug_bin*
+
+# Environment
+.env
+.env.local

@@ -29,9 +29,11 @@ Like [Bitlbee](https://www.bitlbee.org/), you interact with bridge bots to link 
 
 ### Linking Your Accounts
 
-Message a bridge bot in Element to connect your accounts. Each bot walks you through authentication.
+After first login to Element, you'll see your bridge bots ready to message. Each bot walks you through authentication for its platform.
 
-<img src="assets/element.gif" alt="Bridge bots in Element" width="1000">
+<img src="assets/chats.png" alt="Bridge bots on first Element login" width="1000">
+
+<img src="assets/element.gif" alt="Bridge bot welcome messages" width="1000">
 
 ### Sane Defaults
 
@@ -42,7 +44,9 @@ muxbee configures Synapse and bridges so things just work:
 - **Personal filtering spaces** — WhatsApp chats grouped together, Discord together, etc.
 - **Full history sync** — Get your old messages, not just new ones
 - **Double puppeting** — Messages you send from your phone show up as "you" in Element
-- **Bot auto-setup** — Bridge bots are ready to message after running `muxbee setup-bots`
+- **Bot auto-setup** — Bridge bots appear in Element when you enable a bridge
+
+These defaults are baked into the generated config templates (`internal/generator/templates/`). Synapse gets tuned rate limits and federation settings; each bridge gets its own config with shared secrets for double puppeting and appropriate sync settings for that platform.
 
 ### Why not just a docker-compose.yml?
 
@@ -66,18 +70,20 @@ Matrix is difficult to set up. Synapse alone has hundreds of configuration optio
 | Bridge | Login | Notes |
 |--------|-------|-------|
 | **WhatsApp** | QR code | Via linked device |
-| **Signal** | QR code | No history sync (Signal limitation) |
+| **Signal** | QR code | No history sync (Signal limitation), needs testing |
 | **Discord** | QR code or token | May violate ToS |
 | **Telegram** | Phone + code | Requires API credentials from my.telegram.org |
 | **Google Messages** | QR code | SMS/RCS |
 | **Google Chat** | Cookies | Workspace accounts |
 | **Google Voice** | Cookies | SMS/calls |
 | **Slack** | Token + cookie | May violate ToS |
-| **Bluesky** | Username/password | |
-| **Meta** | Cookies | Facebook/Instagram |
-| **Twitter** | Cookies | |
-| **LinkedIn** | Cookies | |
+| **Bluesky** | Username/password | Needs testing |
+| **Meta** | Cookies | Facebook/Instagram, needs testing |
+| **Twitter** | Cookies | Needs testing |
+| **LinkedIn** | Cookies | Needs testing |
 | **IRC** | SASL | |
+
+**Needs testing:** Signal, Bluesky, Meta, Twitter, and LinkedIn have only been verified for bot communication — full functionality needs testing. See [help wanted issues](https://github.com/tobocop2/muxbee/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22).
 
 **Not supported:** iMessage (requires macOS or jailbroken iOS)
 
@@ -101,15 +107,23 @@ See all releases: https://github.com/tobocop2/muxbee/releases
 
 ## Requirements
 
-- Docker (with Docker Compose)
+- **Docker 20.10+** with Compose V2 built-in (`docker compose`, not `docker-compose`)
 - 2GB RAM (4GB recommended)
 - 10GB disk space
+
+Docker Desktop includes Compose V2. On Linux, install docker-compose-plugin or use Docker 23+.
 
 ## Usage
 
 Run `muxbee` for the TUI, or `muxbee --help` for CLI commands.
 
 See [USAGE.md](USAGE.md) for detailed documentation on bridges, connectivity modes, troubleshooting, and more.
+
+## Issues
+
+Found a bug or have a feature request? Check [existing issues](https://github.com/tobocop2/muxbee/issues) first, then [open a new one](https://github.com/tobocop2/muxbee/issues/new) if it doesn't exist.
+
+Some bridges need testing — look for issues labeled [help wanted](https://github.com/tobocop2/muxbee/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22).
 
 ## Credits
 

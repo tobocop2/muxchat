@@ -1,7 +1,8 @@
 # muxbee demo
-# Run with: vhs demo.tape
+# Run from project root: vhs assets/demo.tape
+# Prerequisites: go build -o muxbee . && ./muxbee init
 
-Output demo.gif
+Output assets/demo.gif
 
 Set Shell "bash"
 Set FontSize 16
@@ -10,44 +11,24 @@ Set Height 700
 Set Padding 10
 Set TypingSpeed 50ms
 
-# Make sure muxbee is built and config exists
-# Prerequisites: go build -o muxbee . && ./muxbee init
-
 # Start muxbee
+Set TypingSpeed 120ms
 Type "./muxbee"
+Set TypingSpeed 50ms
 Enter
-Sleep 2s
-
-# === DASHBOARD ===
-# We start on the dashboard - pause to show it
 Sleep 3s
 
 # === BRIDGES ===
-# Press 'b' to go to bridges
 Type "b"
-Sleep 2s
+Sleep 1500ms
 
-# Navigate to signal (index 1) and toggle it
+# Enable signal (down 1 from whatsapp)
 Down
-Sleep 300ms
+Sleep 400ms
 Enter
-Sleep 2s
+Sleep 800ms
 
-# Navigate to bluesky (index 4) - need to go down 3 more
-Down
-Sleep 300ms
-Down
-Sleep 300ms
-Down
-Sleep 300ms
-Enter
-Sleep 2s
-
-# Navigate to meta (index 9) - need to go down 5 more
-Down
-Sleep 300ms
-Down
-Sleep 300ms
+# Queue bluesky while signal is pulling (down 3 more)
 Down
 Sleep 300ms
 Down
@@ -55,83 +36,65 @@ Sleep 300ms
 Down
 Sleep 300ms
 Enter
-Sleep 2s
+Sleep 10s
 
-# Navigate to linkedin (index 11) - need to go down 2 more
+# === DASHBOARD - see new services ===
+Type "d"
+Sleep 4s
+
+# === BRIDGES - disable them ===
+Type "b"
+Sleep 1s
+
+# Back to signal
+Up
+Sleep 200ms
+Up
+Sleep 200ms
+Up
+Sleep 200ms
+Enter
+Sleep 800ms
+
+# Queue disable bluesky
+Down
+Sleep 300ms
 Down
 Sleep 300ms
 Down
 Sleep 300ms
 Enter
-Sleep 2s
+Sleep 8s
 
-# Pause to show bridges enabled
-Sleep 2s
-
-# === BACK TO DASHBOARD ===
+# === DASHBOARD ===
 Type "d"
 Sleep 3s
 
-# === BACK TO BRIDGES ===
+# === BRIDGES - re-enable signal ===
 Type "b"
-Sleep 2s
-
-# Disable the bridges we just enabled (they're still selected positions)
-# Go back to signal (index 1)
-Up
-Sleep 200ms
-Up
-Sleep 200ms
-Up
-Sleep 200ms
-Up
-Sleep 200ms
-Up
-Sleep 200ms
-Up
-Sleep 200ms
-Up
-Sleep 200ms
-Up
-Sleep 200ms
-Up
-Sleep 200ms
-Up
-Sleep 200ms
+Sleep 1s
 Down
 Sleep 300ms
 Enter
-Sleep 1500ms
+Sleep 10s
 
-# === DASHBOARD AGAIN ===
+# === DASHBOARD ===
 Type "d"
-Sleep 2s
+Sleep 3s
 
 # === LOGS ===
 Type "l"
 Sleep 3s
 
 # === SETTINGS ===
-Type "s"
-Sleep 3s
-
-# Show we can navigate in settings but don't change mode
+Type "c"
+Sleep 1500ms
 Down
-Sleep 500ms
+Sleep 400ms
 Down
-Sleep 500ms
-Up
-Sleep 500ms
-Up
-Sleep 500ms
+Sleep 400ms
+Sleep 1s
 
-# Pause to show settings
-Sleep 2s
-
-# === BACK TO DASHBOARD ===
+# === DASHBOARD - final ===
 Type "d"
 Sleep 2s
-
-# Quit
-Type "q"
-Sleep 500ms

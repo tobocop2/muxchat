@@ -3,6 +3,9 @@
 VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo "dev")
 LDFLAGS = -ldflags "-X github.com/tobias/muxbee/cmd.Version=$(VERSION)"
 
+demo:
+	vhs assets/demo.tape
+
 build:
 	go build $(LDFLAGS) -o muxbee .
 
