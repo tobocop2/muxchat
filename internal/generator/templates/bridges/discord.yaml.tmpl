@@ -62,15 +62,19 @@ bridge:
             Docs: https://docs.mau.fi/bridges/go/discord/authentication.html
         welcome_connected: "You're connected to Discord."
         welcome_unconnected: "Use `login-qr` to connect your Discord account."
+    # Double puppeting - makes your messages appear as you, not ghost users
+    # Uses login_shared_secret_map because Discord's Docker container overwrites
+    # the config on startup and doesn't preserve the top-level "double_puppet.secrets"
+    # format that other Go bridges use.
+    login_shared_secret_map:
+        {{.ServerName}}: "{{.DoublePuppetSecret}}"
+    double_puppet_server_map:
+        {{.ServerName}}: http://synapse:8008
+    double_puppet_allow_discovery: false
     permissions:
         "*": relay
         "{{.ServerName}}": user
         "@{{.AdminUser}}:{{.ServerName}}": admin
-
-# Double puppeting - makes your messages appear as you, not ghost users
-double_puppet:
-    secrets:
-        {{.ServerName}}: "{{.DoublePuppetSecret}}"
 
 # Logging config
 logging:
