@@ -427,3 +427,67 @@ func TestGetOrCreateDirectMessage_NewRoom(t *testing.T) {
 		t.Errorf("expected room !newroom:localhost, got %s", roomID)
 	}
 }
+
+func TestLeaveRoom_Success(t *testing.T) {
+	leaveCalled := false
+	forgetCalled := false
+
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+
+		if r.URL.Path == "/_matrix/client/v3/rooms/!room:localhost/leave" && r.Method == "POST" {
+			leaveCalled = true
+			w.WriteHeader(http.StatusOK)
+			json.NewEncoder(w).Encode(map[string]interface{}{})
+			return
+		}
+
+		if r.URL.Path == "/_matrix/client/v3/rooms/!room:localhost/forget" && r.Method == "POST" {
+			forgetCalled = true
+			w.WriteHeader(http.StatusOK)
+			json.NewEncoder(w).Encode(map[string]interface{}{})
+			return
+		}
+
+		w.WriteHeader(http.StatusNotFound)
+	}))
+	defer server.Close()
+
+	client := NewClient(server.URL)
+	client.accessToken = "test_token"
+
+	err := client.LeaveRoom("!room:localhost")
+	if err != nil {
+		t.Errorf("unexpected error: %v", err)
+	}
+	if !leaveCalled {
+		t.Error("expected leave endpoint to be called")
+	}
+	if !forgetCalled {
+		t.Error("expected forget endpoint to be called")
+	}
+}
+
+func TestLeaveRoom_LeaveFails(t *testing.T) {
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+
+		if r.URL.Path == "/_matrix/client/v3/rooms/!room:localhost/leave" {
+			w.WriteHeader(http.StatusForbidden)
+			json.NewEncoder(w).Encode(map[string]string{
+				"errcode": "M_FORBIDDEN",
+				"error":   "You are not in this room",
+			})
+			return
+		}
+	}))
+	defer server.Close()
+
+	client := NewClient(server.URL)
+	client.accessToken = "test_token"
+
+	err := client.LeaveRoom("!room:localhost")
+	if err == nil {
+		t.Error("expected error when leave fails")
+	}
+}

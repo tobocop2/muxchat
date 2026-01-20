@@ -262,3 +262,70 @@ func SetupBotsForUser(cfg *config.Config) error {
 
 	return nil
 }
+
+// SetupBotForBridge creates a DM room with a specific bridge bot and sends a welcome message.
+// This is called automatically when a bridge is enabled via the TUI.
+// Returns nil on success or error. Errors are non-fatal - the bridge still works,
+// the user just needs to find the bot manually.
+func SetupBotForBridge(cfg *config.Config, bridgeName string) error {
+	bridge := bridges.Get(bridgeName)
+	if bridge == nil {
+		return fmt.Errorf("unknown bridge: %s", bridgeName)
+	}
+
+	// Connect to homeserver
+	client := NewClient(fmt.Sprintf("http://localhost:%d", cfg.SynapsePort()))
+
+	// Login as admin
+	if err := client.Login(cfg.Admin.Username, cfg.Admin.Password); err != nil {
+		return fmt.Errorf("failed to login: %w", err)
+	}
+
+	botUserID := fmt.Sprintf("@%s:%s", bridge.BotUsername(), cfg.ServerName)
+
+	// Get or create DM room
+	roomID, isNew, err := client.GetOrCreateDirectMessage(botUserID)
+	if err != nil {
+		return fmt.Errorf("could not create room with %s: %w", bridge.BotUsername(), err)
+	}
+
+	// Send welcome message if we have one (only for new rooms to avoid spam)
+	if isNew {
+		if welcomeMsg, ok := BotWelcomeMessages[bridgeName]; ok {
+			// Ignore error - welcome message is nice-to-have
+			client.SendMessage(roomID, welcomeMsg)
+		}
+	}
+
+	return nil
+}
+
+// CleanupBotForBridge leaves and forgets the DM room with a bridge bot.
+// This is called automatically when a bridge is disabled via the TUI.
+// Returns nil on success or error. Errors are non-fatal.
+func CleanupBotForBridge(cfg *config.Config, bridgeName string) error {
+	bridge := bridges.Get(bridgeName)
+	if bridge == nil {
+		return fmt.Errorf("unknown bridge: %s", bridgeName)
+	}
+
+	// Connect to homeserver
+	client := NewClient(fmt.Sprintf("http://localhost:%d", cfg.SynapsePort()))
+
+	// Login as admin
+	if err := client.Login(cfg.Admin.Username, cfg.Admin.Password); err != nil {
+		return fmt.Errorf("failed to login: %w", err)
+	}
+
+	botUserID := fmt.Sprintf("@%s:%s", bridge.BotUsername(), cfg.ServerName)
+
+	// Find the DM room
+	roomID, err := client.FindDirectMessageRoom(botUserID)
+	if err != nil || roomID == "" {
+		// No room to leave
+		return nil
+	}
+
+	// Leave and forget the room
+	return client.LeaveRoom(roomID)
+}

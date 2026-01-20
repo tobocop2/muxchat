@@ -244,9 +244,16 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 	case bridgeToggledMsg:
 		// Handle bridge toggle completion regardless of active screen
+		m.bridges.currentToggle = ""
+		m.bridges.lastError = msg.err
+
+		// Process queue if there are more bridges to toggle
+		if len(m.bridges.toggleQueue) > 0 && m.config != nil {
+			return m, m.bridges.processQueue(m.config)
+		}
+
 		m.bridges.isLoading = false
 		m.bridges.loadingStep = ""
-		m.bridges.lastError = msg.err
 		return m, nil
 
 	case bridgeSpinnerMsg:
@@ -262,9 +269,16 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		if m.bridges.resultChan != nil {
 			select {
 			case result := <-m.bridges.resultChan:
+				m.bridges.currentToggle = ""
+				m.bridges.lastError = result.err
+
+				// Process queue if there are more bridges to toggle
+				if len(m.bridges.toggleQueue) > 0 && m.config != nil {
+					return m, m.bridges.processQueue(m.config)
+				}
+
 				m.bridges.isLoading = false
 				m.bridges.loadingStep = ""
-				m.bridges.lastError = result.err
 				return m, nil
 			default:
 				if m.bridges.isLoading {

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strings"
 	"time"
 )
 
@@ -249,4 +250,44 @@ func (c *Client) GetOrCreateDirectMessage(userID string) (string, bool, error) {
 		return "", false, err
 	}
 	return roomID, true, nil // new room
+}
+
+// LeaveRoom leaves and forgets a room
+func (c *Client) LeaveRoom(roomID string) error {
+	// Leave the room
+	leaveURL := fmt.Sprintf("%s/_matrix/client/v3/rooms/%s/leave", c.homeserverURL, roomID)
+	req, err := http.NewRequest("POST", leaveURL, strings.NewReader("{}"))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Authorization", "Bearer "+c.accessToken)
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("leave room failed: %s", string(body))
+	}
+
+	// Forget the room so it doesn't show in room list
+	forgetURL := fmt.Sprintf("%s/_matrix/client/v3/rooms/%s/forget", c.homeserverURL, roomID)
+	req, err = http.NewRequest("POST", forgetURL, strings.NewReader("{}"))
+	if err != nil {
+		return err
+	}
+	req.Header.Set("Authorization", "Bearer "+c.accessToken)
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err = c.httpClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	return nil
 }

@@ -11,6 +11,7 @@ import (
 	"github.com/tobias/muxbee/internal/config"
 	"github.com/tobias/muxbee/internal/docker"
 	"github.com/tobias/muxbee/internal/generator"
+	"github.com/tobias/muxbee/internal/matrix"
 )
 
 // BridgesModel handles the bridges screen
@@ -24,6 +25,11 @@ type BridgesModel struct {
 	spinnerIdx  int
 	lastError   error
 	resultChan  chan bridgeToggledMsg
+
+	// Queue for pending bridge toggles
+	toggleQueue       []string
+	currentToggle     string // Bridge currently being toggled
+	queuedCredentials map[string]bool
 
 	// Credential input state
 	credentialInput  bool
@@ -46,11 +52,13 @@ func NewBridgesModel() *BridgesModel {
 	apiHash.CharLimit = 64
 
 	return &BridgesModel{
-		cursor:       0,
-		bridges:      bridges.List(),
-		resultChan:   make(chan bridgeToggledMsg, 1),
-		apiIDInput:   apiID,
-		apiHashInput: apiHash,
+		cursor:            0,
+		bridges:           bridges.List(),
+		resultChan:        make(chan bridgeToggledMsg, 1),
+		toggleQueue:       []string{},
+		queuedCredentials: make(map[string]bool),
+		apiIDInput:        apiID,
+		apiHashInput:      apiHash,
 	}
 }
 
@@ -111,12 +119,13 @@ func (m *BridgesModel) Update(msg tea.Msg, cfg *config.Config) (*BridgesModel, t
 				m.cursor++
 			}
 		case "enter", " ":
-			// Block starting new operations while one is in progress
-			if m.isLoading {
-				return m, nil
-			}
 			if cfg != nil && m.cursor < len(m.bridges) {
 				bridge := m.bridges[m.cursor]
+
+				// Don't queue if already being toggled or queued
+				if m.currentToggle == bridge.Name || m.isQueued(bridge.Name) {
+					return m, nil
+				}
 
 				// Check if bridge requires API credentials and they're not configured
 				if !cfg.IsBridgeEnabled(bridge.Name) && bridge.RequiresAPICredentials {
@@ -125,6 +134,12 @@ func (m *BridgesModel) Update(msg tea.Msg, cfg *config.Config) (*BridgesModel, t
 						m.startCredentialInput(bridge.Name)
 						return m, textinput.Blink
 					}
+				}
+
+				// If already loading, queue the bridge instead of starting immediately
+				if m.isLoading {
+					m.toggleQueue = append(m.toggleQueue, bridge.Name)
+					return m, nil
 				}
 
 				m.startBridgeToggle(cfg, bridge.Name)
@@ -254,6 +269,7 @@ func (m *BridgesModel) saveCredentials(cfg *config.Config, bridgeName, apiID, ap
 // startBridgeToggle starts the async bridge toggle operation
 func (m *BridgesModel) startBridgeToggle(cfg *config.Config, bridgeName string) {
 	m.isLoading = true
+	m.currentToggle = bridgeName
 	m.lastError = nil
 	m.spinnerIdx = 0
 	if cfg.IsBridgeEnabled(bridgeName) {
@@ -262,6 +278,31 @@ func (m *BridgesModel) startBridgeToggle(cfg *config.Config, bridgeName string) 
 		m.loadingStep = "Pulling & starting " + bridgeName
 	}
 	go m.toggleBridgeBackground(cfg, bridgeName)
+}
+
+// isQueued checks if a bridge is in the toggle queue
+func (m *BridgesModel) isQueued(bridgeName string) bool {
+	for _, name := range m.toggleQueue {
+		if name == bridgeName {
+			return true
+		}
+	}
+	return false
+}
+
+// processQueue starts the next queued toggle if any
+func (m *BridgesModel) processQueue(cfg *config.Config) tea.Cmd {
+	if len(m.toggleQueue) == 0 {
+		return nil
+	}
+
+	// Pop the first item from the queue
+	nextBridge := m.toggleQueue[0]
+	m.toggleQueue = m.toggleQueue[1:]
+
+	// Start the toggle
+	m.startBridgeToggle(cfg, nextBridge)
+	return tea.Batch(m.spinnerTick(), m.checkResult())
 }
 
 // spinnerTick returns a command that ticks the spinner
@@ -291,7 +332,11 @@ func (m *BridgesModel) View(cfg *config.Config) string {
 
 	if m.isLoading {
 		spinner := spinnerFrames[m.spinnerIdx]
-		s += SubtitleStyle.Render(spinner+" "+m.loadingStep+"...") + "\n\n"
+		loadingMsg := spinner + " " + m.loadingStep + "..."
+		if len(m.toggleQueue) > 0 {
+			loadingMsg += fmt.Sprintf(" (%d queued)", len(m.toggleQueue))
+		}
+		s += SubtitleStyle.Render(loadingMsg) + "\n\n"
 	}
 
 	if m.lastError != nil {
@@ -316,10 +361,19 @@ func (m *BridgesModel) View(cfg *config.Config) string {
 			enabled = "[ ]"
 		}
 
+		// Show status indicator for active/queued bridges
+		status := ""
+		if m.currentToggle == bridge.Name {
+			status = " " + spinnerFrames[m.spinnerIdx]
+		} else if m.isQueued(bridge.Name) {
+			status = " (queued)"
+		}
+
+		line := cursor + " " + enabled + " " + bridge.Name + status
 		if i == m.cursor {
-			s += ListItemSelectedStyle.Render(cursor+" "+enabled+" "+bridge.Name) + "\n"
+			s += ListItemSelectedStyle.Render(line) + "\n"
 		} else {
-			s += ListItemStyle.Render(cursor+" "+enabled+" "+bridge.Name) + "\n"
+			s += ListItemStyle.Render(line) + "\n"
 		}
 	}
 
@@ -469,7 +523,15 @@ func (m *BridgesModel) toggleBridgeBackground(cfg *config.Config, bridgeName str
 			m.resultChan <- bridgeToggledMsg{err: fmt.Errorf("%s failed to start - check logs with 'muxbee logs %s'", bridgeName, serviceName)}
 			return
 		}
+
+		// Setup bot DM room so it appears in Element immediately
+		// This is non-fatal - if it fails, the user can still find the bot manually
+		matrix.SetupBotForBridge(cfg, bridgeName)
 	} else {
+		// Leave and forget the bot DM room so it doesn't clutter Element
+		// This is non-fatal - if it fails, the room just stays
+		matrix.CleanupBotForBridge(cfg, bridgeName)
+
 		// Stop and remove the bridge container
 		serviceName := "mautrix-" + bridgeName
 		d.StopService(serviceName) // Ignore error, might not be running
