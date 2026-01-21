@@ -7,11 +7,11 @@ import (
 
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/tobias/muxbee/internal/bridges"
-	"github.com/tobias/muxbee/internal/config"
-	"github.com/tobias/muxbee/internal/docker"
-	"github.com/tobias/muxbee/internal/generator"
-	"github.com/tobias/muxbee/internal/matrix"
+	"github.com/tobocop2/muxbee/internal/bridges"
+	"github.com/tobocop2/muxbee/internal/config"
+	"github.com/tobocop2/muxbee/internal/docker"
+	"github.com/tobocop2/muxbee/internal/generator"
+	"github.com/tobocop2/muxbee/internal/matrix"
 )
 
 // BridgesModel handles the bridges screen

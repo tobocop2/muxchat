@@ -8,7 +8,7 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
-	"github.com/tobias/muxbee/internal/docker"
+	"github.com/tobocop2/muxbee/internal/docker"
 )
 
 // LogsModel handles the logs screen

@@ -3,8 +3,8 @@ package matrix
 import (
 	"fmt"
 
-	"github.com/tobias/muxbee/internal/bridges"
-	"github.com/tobias/muxbee/internal/config"
+	"github.com/tobocop2/muxbee/internal/bridges"
+	"github.com/tobocop2/muxbee/internal/config"
 )
 
 // BotWelcomeMessages contains welcome messages for each bridge bot

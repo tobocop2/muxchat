@@ -8,7 +8,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tobias/muxbee/internal/config"
+	"github.com/tobocop2/muxbee/internal/config"
 )
 
 func setupTestEnv(t *testing.T) string {

@@ -14,7 +14,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/tobias/muxbee/internal/config"
+	"github.com/tobocop2/muxbee/internal/config"
 )
 
 //go:embed docker-compose.yml

@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/tobias/muxbee/internal/tui"
+	"github.com/tobocop2/muxbee/internal/tui"
 )
 
 // Version is set at build time via ldflags

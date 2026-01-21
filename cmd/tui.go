@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/tobias/muxbee/internal/tui"
+	"github.com/tobocop2/muxbee/internal/tui"
 )
 
 var tuiCmd = &cobra.Command{

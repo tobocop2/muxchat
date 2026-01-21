@@ -1,7 +1,7 @@
 .PHONY: build test clean install
 
 VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo "dev")
-LDFLAGS = -ldflags "-X github.com/tobias/muxbee/cmd.Version=$(VERSION)"
+LDFLAGS = -ldflags "-X github.com/tobocop2/muxbee/cmd.Version=$(VERSION)"
 
 demo:
 	vhs assets/demo.tape

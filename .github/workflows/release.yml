@@ -24,7 +24,7 @@ jobs:
       - name: Build binaries
         run: |
           VERSION=${GITHUB_REF#refs/tags/}
-          LDFLAGS="-s -w -X github.com/tobias/muxbee/cmd.Version=$VERSION"
+          LDFLAGS="-s -w -X github.com/tobocop2/muxbee/cmd.Version=$VERSION"
 
           # Linux amd64
           GOOS=linux GOARCH=amd64 go build -ldflags="$LDFLAGS" -o dist/muxbee-linux-amd64 .

@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/tobias/muxbee/internal/config"
+	"github.com/tobocop2/muxbee/internal/config"
 	"gopkg.in/yaml.v3"
 )
 

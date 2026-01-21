@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/tobias/muxbee/internal/config"
-	"github.com/tobias/muxbee/internal/docker"
+	"github.com/tobocop2/muxbee/internal/config"
+	"github.com/tobocop2/muxbee/internal/docker"
 )
 
 var downCmd = &cobra.Command{

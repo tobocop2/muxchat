@@ -93,6 +93,14 @@ curl -fsSL https://raw.githubusercontent.com/tobocop2/muxbee/main/scripts/instal
 
 Downloads the correct binary for your platform to the current directory. Move it to your PATH.
 
+If you have Go installed:
+
+```bash
+go install github.com/tobocop2/muxbee@latest
+```
+
+Installs the `muxbee` executable to `$GOPATH/bin` (or `$HOME/go/bin` by default).
+
 Or build from source:
 ```bash
 git clone https://github.com/tobocop2/muxbee.git

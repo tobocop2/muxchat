@@ -9,10 +9,10 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/tobias/muxbee/internal/config"
-	"github.com/tobias/muxbee/internal/docker"
-	"github.com/tobias/muxbee/internal/generator"
-	"github.com/tobias/muxbee/internal/matrix"
+	"github.com/tobocop2/muxbee/internal/config"
+	"github.com/tobocop2/muxbee/internal/docker"
+	"github.com/tobocop2/muxbee/internal/generator"
+	"github.com/tobocop2/muxbee/internal/matrix"
 )
 
 var upCmd = &cobra.Command{

@@ -1,4 +1,4 @@
-module github.com/tobias/muxbee
+module github.com/tobocop2/muxbee
 
 go 1.23.0
 

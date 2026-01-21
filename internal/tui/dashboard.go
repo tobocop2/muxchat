@@ -7,8 +7,8 @@ import (
 	"time"
 
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/tobias/muxbee/internal/config"
-	"github.com/tobias/muxbee/internal/docker"
+	"github.com/tobocop2/muxbee/internal/config"
+	"github.com/tobocop2/muxbee/internal/docker"
 )
 
 var dashboardSpinnerFrames = []string{"⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"}

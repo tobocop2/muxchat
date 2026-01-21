@@ -5,9 +5,9 @@ import (
 
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/tobias/muxbee/internal/config"
-	"github.com/tobias/muxbee/internal/docker"
-	"github.com/tobias/muxbee/internal/generator"
+	"github.com/tobocop2/muxbee/internal/config"
+	"github.com/tobocop2/muxbee/internal/docker"
+	"github.com/tobocop2/muxbee/internal/generator"
 )
 
 // SettingsModel handles the settings screen
