@@ -141,3 +141,10 @@ muxbee wouldn't exist without the incredible [mautrix bridge ecosystem](https://
 ## License
 
 MIT
+
+
+# Note about the code
+
+Saving the best for last
+
+> This repo unapologetically includes some AI slop, but it works, and I vigilantly guided it and established the architecture. I carefully reviewed every piece. Telegram support is pretty hacky in that you need to initialize the bridge with API credentials. I enabled that support but it's just a hacky strategy that I'll hopefully revise sometime soon. I've wanted something of this nature for myself for a while and I figured now was the time. I am too lazy to configure synapse the old fashion way and just would wind up scripting something in a hacky way that works for a while. One day I'll have all these chats routed through IRC so I can revert back to using IRC but until then, I'm pretty happy with this solution
