@@ -27,9 +27,11 @@ Like [Bitlbee](https://www.bitlbee.org/), you interact with bridge bots to link 
 
 ## Requirements
 
-- **Docker 20.10+** with Compose V2 built-in (`docker compose`, not `docker-compose`) verify you can run `docker compose`
+- **Docker 20.10+** with Compose V2 built-in (`docker compose`, not `docker-compose`) — verify you can run `docker compose`
 - 2GB RAM (4GB recommended)
 - 10GB disk space
+
+> All bridges and Element enabled pulls ~3GB of Docker images. Toggle only the bridges you need, and disable Element if you prefer your own client.
 
 ## Install
 
