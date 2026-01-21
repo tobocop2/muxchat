@@ -17,7 +17,7 @@ Run one command. The TUI walks you through setup, starts services, and you're do
 
 ## What It Does
 
-muxbee is a single binary that sets up a self-hosted Matrix server with messaging bridges. All your chats from different platforms in one place. No config files to edit, no secrets to manage — just run it.
+muxbee is a single binary that sets up a self-hosted Matrix server with messaging bridges. All your chats from different platforms in one place. Config files are generated and complexity is handled for you.
 
 - **Synapse** (Matrix homeserver)
 - **Element Web** (bundled chat interface — disable via TUI or `muxbee init --no-element`)
@@ -119,10 +119,10 @@ Some bridges require cookie/token extraction from your browser. See [`scripts/co
 
 Matrix is difficult to set up. Synapse alone has hundreds of configuration options. Add bridges and you're dealing with: appservice registration files with cryptographic tokens, database configuration for each bridge, Docker networking, rate limit tuning, and double-puppeting setup. Each bridge has its own config format. Getting it all working together is difficult and easy to mess up.
 
-[Bitlbee](https://www.bitlbee.org/) is a massive inspiration, an orchestrator for chat plugins, all accessible via IRC. muxbee is similar in spirit: an orchestrator for [mautrix](https://github.com/mautrix) bridges, all accessible via Matrix. Bitlbee's limitations: bridges poll (delayed messages), you miss messages when disconnected, no encryption, no reactions/threads/edits, and formatting gets mangled. Matrix handles all of this.
+[Bitlbee](https://www.bitlbee.org/) is a massive inspiration, an orchestrator for chat plugins, all accessible via IRC. muxbee is similar in spirit: an orchestrator for matrix (for now mostly [mautrix](https://github.com/mautrix)) bridges, all accessible via Matrix. Bitlbee's limitations: bridges poll (delayed messages), you miss messages when disconnected, no encryption, no reactions/threads/edits, and formatting gets mangled. Matrix handles all of this.
 
 [Beeper](https://beeper.com) also solves this problem with a polished app and cloud-hosted bridges. muxbee is not nearly as polished and is for tinkerers who want full control — no app installs, no cloud dependencies, runs on your hardware. There's some manual setup (messaging bridge bots), but it's simple for QR code bridges like WhatsApp, Discord, and Google Messages. You can also point Beeper or any Matrix client at the Synapse server muxbee sets up but this project
-bundles an Element web app.
+bundles an Element web app. Beeper automatically will correct any issues with its cloud hosted bridges while locally hosting will require periodically updating bridges but this is an expected pain point around locally hosting things
 
 ## Architecture
 
