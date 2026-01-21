@@ -3,9 +3,9 @@
 [![CI](https://github.com/tobocop2/muxbee/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tobocop2/muxbee/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/tobocop2/muxbee/graph/badge.svg)](https://codecov.io/gh/tobocop2/muxbee)
 
-> **Early Development:** Bridges may break when upstream images update. Use `muxbee update` (or `u` in TUI) to pull latest images and restart.
+> **Early Development:** muxbee is experimental and bridge failures are expected. When bridges stop working, use `muxbee update` (or `u` in TUI) to pull latest images and restart.
 
-Run one command. Toggle your bridges. Wait. Your chats appear.
+A batteries-included Matrix chat bridge stack and orchestrator. Built with Go, a single binary that puts all your messages in one place — WhatsApp, Signal, Discord, Telegram, and more — without editing config files or managing secrets.
 
 ![muxbee demo](assets/demo.gif)
 
@@ -13,7 +13,7 @@ Run one command. Toggle your bridges. Wait. Your chats appear.
 muxbee
 ```
 
-That's it. The TUI walks you through setup, starts services, and you're done. Toggle WhatsApp, Signal, Discord — whatever you want — and message the bot to link your account.
+Run one command. The TUI walks you through setup, starts services, and you're done. Toggle bridges, message the bot to link your account, and your chats appear.
 
 > **Note:** The UI briefly blocks during startup and when toggling bridges while Docker operations complete. This is [expected behavior](https://github.com/tobocop2/muxbee/issues/3) for now.
 
@@ -23,39 +23,35 @@ muxbee is a single binary that sets up a self-hosted Matrix server with messagin
 
 - **Synapse** (Matrix homeserver)
 - **Element Web** (bundled chat interface — disable via TUI or `muxbee init --no-element`)
-- **Messaging bridges** (WhatsApp, Signal, Discord, Telegram, etc.)
+- **Messaging bridges** (WhatsApp, Signal, Discord, Telegram, etc.) — ships with most [mautrix](https://mau.fi/bridges/) bridges by default, but not limited to them. See [Adding a New Bridge](ARCHITECTURE.md#adding-a-new-bridge) for alternatives. PRs welcome!
 
 Like [Bitlbee](https://www.bitlbee.org/), you interact with bridge bots to link accounts (e.g., message `@whatsappbot` and follow the prompts). Unlike Bitlbee, messages sync in real-time, you don't miss messages when offline, and modern features like reactions, threads, and encryption work.
 
 ### Linking Your Accounts
 
-After first login to Element, you'll see your bridge bots ready to message. Each bot walks you through authentication for its platform.
+muxbee hosts Element Web out of the box. Run `muxbee open` or visit the URL shown after `muxbee up`. Prefer your own client? Disable Element via TUI settings or `muxbee init --no-element`.
+
+Log in with the admin credentials shown during setup. If you missed them:
+
+```bash
+muxbee config show --show-secrets
+```
+
+Look for the `admin:` section in the output. On Linux/Mac, you can extract it directly:
+
+```bash
+muxbee config show --show-secrets | grep -A2 "^admin:"
+```
+
+After login, you'll see bridge bots ready to message. Each bot walks you through authentication.
 
 <img src="assets/chats.png" alt="Bridge bots on first Element login" width="1000">
 
 <img src="assets/element.gif" alt="Bridge bot welcome messages" width="1000">
 
-### Sane Defaults
+### Architecture
 
-muxbee configures Synapse and bridges so things just work:
-
-- **Auto-accept invites** — New chat rooms from bridges appear automatically, no manual accept needed
-- **High rate limits** — Sync thousands of messages without getting throttled
-- **Personal filtering spaces** — WhatsApp chats grouped together, Discord together, etc.
-- **Full history sync** — Get your old messages, not just new ones
-- **Double puppeting** — Messages you send from your phone show up as "you" in Element
-- **Bot auto-setup** — Bridge bots appear in Element when you enable a bridge
-
-These defaults are baked into the generated config templates (`internal/generator/templates/`). Synapse gets tuned rate limits and federation settings; each bridge gets its own config with shared secrets for double puppeting and appropriate sync settings for that platform.
-
-### Why not just a docker-compose.yml?
-
-A static docker-compose.yml can't:
-- **Generate secrets** — Each install needs unique passwords, appservice tokens, and signing keys. muxbee generates these on first run.
-- **Register bridges dynamically** — When you enable a bridge, Synapse needs its registration.yaml added and a restart.
-- **Adapt to your setup** — Domain, ports, which bridges — these require regenerating config files that reference each other.
-
-muxbee handles all of this. Everything is generated from your choices and can be regenerated anytime.
+See [ARCHITECTURE.md](ARCHITECTURE.md) for design decisions and configuration details.
 
 ## Background
 
@@ -121,19 +117,7 @@ See [USAGE.md](USAGE.md) for detailed documentation on bridges, connectivity mod
 
 ## Helper Scripts
 
-Some bridges require cookie/token extraction from your browser. Helper scripts (Node.js) automate this:
-
-```bash
-cd scripts/cookie-helpers && npm install
-node googlechat.js   # Google Chat cookies
-node gvoice.js       # Google Voice cookies
-node slack.js        # Slack token + cookie
-node meta.js         # Facebook/Instagram cookies
-node twitter.js      # Twitter cookies
-node linkedin.js     # LinkedIn cookies
-```
-
-See [`scripts/cookie-helpers/README.md`](scripts/cookie-helpers/README.md) for details. Alternative: [mautrix-manager](https://github.com/mautrix/manager).
+Some bridges require cookie/token extraction from your browser. See [`scripts/cookie-helpers/`](scripts/cookie-helpers/) for Node.js scripts that automate this. Alternative: [mautrix-manager](https://github.com/mautrix/manager).
 
 ## Issues
 
@@ -143,7 +127,7 @@ Some bridges need testing — look for issues labeled [help wanted](https://gith
 
 ## Credits
 
-muxbee uses the [mautrix bridges](https://github.com/mautrix) by [Tulir Asokan](https://github.com/tulir).
+muxbee wouldn't exist without the incredible [mautrix bridge ecosystem](https://github.com/mautrix) by [Tulir Asokan](https://github.com/tulir). Massive thanks for making high-quality Matrix bridges available to everyone.
 
 ## License
 

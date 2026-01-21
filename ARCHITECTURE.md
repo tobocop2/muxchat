@@ -66,6 +66,14 @@ muxbee is distributed as a single Go binary with embedded assets:
 
 This means users download one file. No cloning repos, no managing config files manually.
 
+### Why Not Just a Static docker-compose.yml?
+A static docker-compose.yml can't:
+- **Generate secrets** — Each install needs unique passwords, appservice tokens, and signing keys
+- **Register bridges dynamically** — When you enable a bridge, Synapse needs its registration.yaml added and a restart
+- **Adapt to your setup** — Domain, ports, which bridges — these require regenerating config files that reference each other
+
+muxbee generates everything from your choices and can regenerate anytime.
+
 ### Docker Compose via Shell (not SDK)
 We shell out to `docker compose` rather than using the Docker SDK because:
 - Simpler implementation
