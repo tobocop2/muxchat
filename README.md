@@ -85,13 +85,16 @@ Matrix is difficult to set up. Synapse alone has hundreds of configuration optio
 
 See [USAGE.md](USAGE.md) for login details and helper scripts for cookie extraction.
 
+## Requirements
+
+- **Docker 20.10+** with Compose V2 built-in (`docker compose`, not `docker-compose`)
+- 2GB RAM (4GB recommended)
+- 10GB disk space
+
+Docker Desktop includes Compose V2. On Linux, install docker-compose-plugin or use Docker 23+.
+
+
 ## Install
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/tobocop2/muxbee/main/scripts/install.sh | sh
-```
-
-Downloads the correct binary for your platform to the current directory. Move it to your PATH.
 
 If you have Go installed:
 
@@ -99,7 +102,15 @@ If you have Go installed:
 go install github.com/tobocop2/muxbee@latest
 ```
 
-Installs the `muxbee` executable to `$GOPATH/bin` (or `$HOME/go/bin` by default).
+installs the `muxbee` executable to `$GOPATH/bin` (or `$HOME/go/bin` by default).
+
+
+Otherwise, below command downloads the correct binary for your platform to the current directory. Move it to your PATH.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/tobocop2/muxbee/main/scripts/install.sh | sh
+```
+
 
 Or build from source:
 ```bash
@@ -108,14 +119,6 @@ cd muxbee && go build -o muxbee .
 ```
 
 See all releases: https://github.com/tobocop2/muxbee/releases
-
-## Requirements
-
-- **Docker 20.10+** with Compose V2 built-in (`docker compose`, not `docker-compose`)
-- 2GB RAM (4GB recommended)
-- 10GB disk space
-
-Docker Desktop includes Compose V2. On Linux, install docker-compose-plugin or use Docker 23+.
 
 ## Usage
 
