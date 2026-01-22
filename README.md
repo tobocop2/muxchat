@@ -3,9 +3,10 @@
 [![CI](https://github.com/tobocop2/muxbee/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/tobocop2/muxbee/actions/workflows/ci.yml)
 [![codecov](https://codecov.io/gh/tobocop2/muxbee/graph/badge.svg)](https://codecov.io/gh/tobocop2/muxbee)
 
-> **Early Development:** muxbee is experimental and bridge failures are expected. When bridges stop working, use `muxbee update` (or `u` in TUI) to pull latest images and restart.
+> **Early Development:** muxbee is experimental and bridge failures are expected. When bridges stop working, use `muxbee update` (or `u` in TUI) to pull latest images and restart. For local  use only
 
-A batteries-included Matrix chat bridge stack and orchestrator. Built with Go, a single binary that puts all your messages in one place — WhatsApp, Signal, Discord, Telegram, and more — without editing config files or managing secrets.
+A batteries-included Matrix starter kit, chat bridge stack, and orchestrator. Built with Go and Docker, a single binary that facilitates putting all your messages in one place. 
+The only manual configuration is authentication with each service which doesn't have to be done often and should take a few minutes at most.
 
 ![muxbee demo](assets/demo.gif)
 
@@ -18,6 +19,9 @@ Run one command. The TUI walks you through setup, starts services, and you're do
 ## What It Does
 
 muxbee is a single binary that sets up a self-hosted Matrix server with messaging bridges. All your chats from different platforms in one place. Config files are generated and complexity is handled for you.
+Essentially, muxbee is a locally hosted matrix starter kit that also happens to support bridges out of the box. Existing synapse users can use muxbee as a bridge configuration generator and then adapt their own configs with
+what muxbee generates
+
 
 - **Synapse** (Matrix homeserver)
 - **Element Web** (bundled chat interface — disable via TUI or `muxbee init --no-element`)
@@ -25,8 +29,7 @@ muxbee is a single binary that sets up a self-hosted Matrix server with messagin
 
 Like [Bitlbee](https://www.bitlbee.org/), you interact with bridge bots to link accounts (e.g., message `@whatsappbot` and follow the prompts). Unlike Bitlbee, messages sync in real-time, you don't miss messages when offline, and modern features like reactions, threads, and encryption work.
 
-> muxbee runs its own Synapse — ideal for a turnkey setup, but doesn't integrate with existing homeservers yet. [External Synapse support](https://github.com/tobocop2/muxbee/issues/14) is planned.
-
+> muxbee runs its own Synapse — ideal for a turnkey setup, but doesn't integrate with existing homeservers yet. 
 ## Requirements
 
 - **Docker 20.10+** with Compose V2 built-in (`docker compose`, not `docker-compose`) — verify you can run `docker compose`
@@ -66,6 +69,9 @@ See all releases: https://github.com/tobocop2/muxbee/releases
 ## Usage
 
 Run `muxbee` for the TUI, or `muxbee --help` for CLI commands.
+
+`muxbee` by default enables element and the TUI will show a link to the element web app. If you are new to the Matrix ecosystem, you can get your feet wet with element for web and configure all your bridges and enjoy watching 
+all of your messages appear in one place once you authenticate with each service bot
 
 See [USAGE.md](USAGE.md) for detailed documentation on bridges, connectivity modes, troubleshooting, and more.
 
@@ -123,14 +129,13 @@ Some bridges require cookie/token extraction from your browser. See [`scripts/co
 
 Matrix is difficult to set up. Synapse alone has hundreds of configuration options. Add bridges and you're dealing with: appservice registration files with cryptographic tokens, database configuration for each bridge, Docker networking, rate limit tuning, and double-puppeting setup. Each bridge has its own config format. Getting it all working together is difficult and easy to mess up.
 
-[Bitlbee](https://www.bitlbee.org/) is a massive inspiration, an orchestrator for chat plugins, all accessible via IRC. muxbee is similar in spirit: an orchestrator for matrix (for now mostly [mautrix](https://github.com/mautrix)) bridges, all accessible via Matrix. Bitlbee's limitations: bridges poll (delayed messages), you miss messages when disconnected, no encryption, no reactions/threads/edits, and formatting gets mangled. Matrix handles all of this.
+[Bitlbee](https://www.bitlbee.org/) and [Pidgin](https://pidgin.im/) are a massive inspiratios. muxbee is similar in spirit: an orchestrator for matrix (for now mostly [mautrix](https://github.com/mautrix)) bridges, all accessible via Matrix. Previous solution limitations: bridges poll (delayed messages), you miss messages when disconnected, no modern E2EE support, no reactions/threads/edits, and formatting gets mangled. Matrix handles all of this natively.
 
-[Beeper](https://beeper.com) also solves this problem with a polished app and cloud-hosted bridges. muxbee is not nearly as polished and is for tinkerers who want full control — no app installs, no cloud dependencies, runs on your hardware. There's some manual setup (messaging bridge bots), but it's simple for QR code bridges like WhatsApp, Discord, and Google Messages. You can also point Beeper or any Matrix client at the Synapse server muxbee sets up but this project
-bundles an Element web app. Beeper automatically will correct any issues with its cloud hosted bridges while locally hosting will require periodically updating bridges but this is an expected pain point around locally hosting things
+Check out  [Beeper](https://beeper.com)  and [Beeper-Manager](https://github.com/beeper/bridge-manager) as alternatives to this project if you are looking for something polished. With this project, you control the synapse server and all bridges. There is no authentication with cloud services and bridge setup is extremely simple. There's some manual setup (messaging bridge bots), but it's simple for QR code bridges like WhatsApp, Discord, and Google Messages. You can also point Beeper or any Matrix client at the Synapse server muxbee sets up but this project bundles an Element web app. Beeper automatically will correct any issues with its cloud hosted bridges while locally hosting will require periodically updating bridges but this is an expected pain point around locally hosting things. With element enabled, muxbee is essentially a fully locally hosted no frills, buggier alternative to beeper (for those that don't need imessage) with some light manual curation. The responsibility for authentication is delegated to bots and following bot instructions.
 
-## Architecture
+This tool is meant for folks that loved tools like [Pidgin](https://pidgin.im/) and bitlbee but found them increasingly difficult to maintain as modern protocols evolved. While those ecosystems are awesome, they often require manual compilation and lack support for modern features. muxbee has an even smaller learning curve.
 
-See [ARCHITECTURE.md](ARCHITECTURE.md) for design decisions and configuration details.
+Unlike [Pidgin](https://pidgin.im/) and bitlbee, there is no need to build plugins from source. Everything is containerized right now and synchronizing bridges with the latest versions is all contained within muxbee. If you are like me and feel that the bitlbee/[Pidgin](https://pidgin.im/) bridge experiences were more than satisfactory, then this tool is definitely for you
 
 ## Issues
 
@@ -142,13 +147,26 @@ Some bridges need testing — look for issues labeled [help wanted](https://gith
 
 muxbee wouldn't exist without the incredible [mautrix bridge ecosystem](https://github.com/mautrix) by [Tulir Asokan](https://github.com/tulir). Massive thanks for making many amazing Matrix bridges available to everyone.
 
-## License
+## Plans
 
-MIT
+
+Some bridges have quirks that need to be addressed but I have been able to send and receive messages reliably since the first version has been released. See issues for the behavior I have observed.
+
+Next, I'd like to add more useful bridges.
+
+Lastly, a streamlined self hosted solution is being prioritized but it's not ready yet. Some preliminary self hosting configs/code exist but these are not trustworthy and I do not recommend running this anywhere but your local machine for the time being.
+
+Ideally, I imagine a docker image and a docker-compose.yml file will be supplied with placeholders for the enabled bridges. At this moment everything is self contained to the executable, but I will be likely removing that functionality as I want this tool to have a single responsibility
+and that is to  streamline the orchestration and configuration of synapse with bridges.
 
 
 # Note about the code
 
 Saving the best for last
 
-> This repo unapologetically has used AI, but it works, and I vigilantly guided it and established the architecture. I carefully reviewed every piece. Telegram support is pretty hacky in that you need to initialize the bridge with API credentials. I enabled that support but it's just a hacky strategy that I'll hopefully revise sometime soon. I've wanted something of this nature for myself for a while and I figured now was the time. I am too lazy to configure synapse the old fashion way and just would wind up scripting something in a hacky way that works for a while. One day I'll have all these chats routed through IRC so I can revert back to using IRC but until then, I'm pretty happy with this solution
+> AI has unapologetically been used in synergy with some home rolling, but it works, and I vigilantly guided it and established the architecture. I carefully reviewed every piece. Telegram support is ugly right now due to requiring API credentials. I enabled that support but it's just a hacky strategy that I'll hopefully revise sometime soon. I've wanted something of this nature for myself for a while and I figured now was the time. I am too lazy to configure synapse the old fashion way and just would wind up scripting something in a hacky way that works for a while. One day I'll have all these chats routed through IRC so I can revert back to using IRC but until then, I'm pretty happy with this solution
+
+
+## License
+
+MIT
